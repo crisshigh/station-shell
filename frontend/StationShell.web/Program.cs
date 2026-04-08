@@ -1,4 +1,4 @@
-using StationShell.web.Components;
+using StationShell.Web.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 

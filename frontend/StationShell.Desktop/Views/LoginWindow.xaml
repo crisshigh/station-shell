@@ -1,0 +1,118 @@
+<Window x:Class="StationShell.Desktop.Views.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Gestion Station Shell"
+        Height="600" Width="900"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Background="#1A1A2E">
+
+    <Window.Resources>
+        <SolidColorBrush x:Key="ShellRed" Color="#DD1F26"/>
+        <SolidColorBrush x:Key="ShellYellow" Color="#FFC200"/>
+
+        <Style x:Key="BtnConnexion" TargetType="Button">
+            <Setter Property="Background" Value="#DD1F26"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FF3B42"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="InputStyle" TargetType="TextBox">
+            <Setter Property="Background" Value="#0F3460"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#FFC200"/>
+            <Setter Property="BorderThickness" Value="0,0,0,2"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="CaretBrush" Value="White"/>
+        </Style>
+
+        <Style x:Key="PasswordStyle" TargetType="PasswordBox">
+            <Setter Property="Background" Value="#0F3460"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#FFC200"/>
+            <Setter Property="BorderThickness" Value="0,0,0,2"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="CaretBrush" Value="White"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="380"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Panneau gauche - Branding -->
+        <Grid Grid.Column="0" Background="#0F3460">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Ellipse Width="100" Height="100" Fill="#DD1F26" HorizontalAlignment="Center"/>
+                <TextBlock Text="SHELL" FontSize="36" FontWeight="Black"
+                           Foreground="#FFC200" HorizontalAlignment="Center" Margin="0,-60,0,0"/>
+                <TextBlock Text="GESTION STATION" FontSize="18" FontWeight="Bold"
+                           Foreground="White" HorizontalAlignment="Center" Margin="0,20,0,0"/>
+                <Rectangle Height="3" Width="80" Fill="#FFC200"
+                           HorizontalAlignment="Center" Margin="0,10,0,20"/>
+                <TextBlock Text="Système de gestion intégré" FontSize="12"
+                           Foreground="#AAAAAA" HorizontalAlignment="Center"/>
+                <TextBlock Text="Piste · Boutique · Personnel" FontSize="12"
+                           Foreground="#AAAAAA" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+            </StackPanel>
+            <TextBlock Text="v1.0.0" FontSize="11" Foreground="#555555"
+                       VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,15"/>
+        </Grid>
+
+        <!-- Panneau droit - Formulaire -->
+        <Border Grid.Column="1" Background="#16213E" Padding="40">
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock Text="Connexion" FontSize="28" FontWeight="Bold"
+                           Foreground="White" Margin="0,0,0,5"/>
+                <TextBlock Text="Entrez vos identifiants pour accéder au système"
+                           FontSize="12" Foreground="#888888" TextWrapping="Wrap" Margin="0,0,0,35"/>
+
+                <!-- Email -->
+                <TextBlock Text="EMAIL" FontSize="11" FontWeight="Bold"
+                           Foreground="#FFC200" Margin="0,0,0,6"/>
+                <TextBox x:Name="TxtEmail" Style="{StaticResource InputStyle}"/>
+
+                <!-- Mot de passe -->
+                <TextBlock Text="MOT DE PASSE" FontSize="11" FontWeight="Bold"
+                           Foreground="#FFC200" Margin="0,20,0,6"/>
+                <PasswordBox x:Name="TxtPassword" Style="{StaticResource PasswordStyle}"/>
+
+                <!-- Message erreur -->
+                <TextBlock x:Name="TxtErreur" FontSize="12" Foreground="#DD1F26"
+                           Margin="0,12,0,0" Visibility="Collapsed" TextWrapping="Wrap"/>
+
+                <!-- Bouton -->
+                <Button Content="SE CONNECTER" Style="{StaticResource BtnConnexion}"
+                        Margin="0,25,0,0" Click="BtnConnexion_Click"/>
+
+                <Rectangle Height="1" Fill="#333355" Margin="0,30,0,20"/>
+                <TextBlock Text="© 2026 Gestion Station Shell" FontSize="11"
+                           Foreground="#444466" HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

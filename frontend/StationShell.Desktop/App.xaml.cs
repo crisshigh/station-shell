@@ -1,13 +1,20 @@
-﻿using System.Configuration;
-using System.Data;
-using System.Windows;
+﻿using System.Windows;
 
 namespace StationShell.Desktop;
 
-/// <summary>
-/// Interaction logic for App.xaml
-/// </summary>
 public partial class App : Application
 {
-}
+    protected override void OnStartup(StartupEventArgs e)
+    {
+        base.OnStartup(e);
+        
+        DispatcherUnhandledException += (s, ex) =>
+        {
+            MessageBox.Show($"Erreur : {ex.Exception.Message}", "Erreur");
+            ex.Handled = true;
+        };
 
+        var window = new Views.LoginWindow();
+        window.Show();
+    }
+}

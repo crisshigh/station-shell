@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("StationShell.Shared")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c00bf6ae13210a692ebaa0933c419227005b1426")]
 [assembly: System.Reflection.AssemblyProductAttribute("StationShell.Shared")]
 [assembly: System.Reflection.AssemblyTitleAttribute("StationShell.Shared")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
