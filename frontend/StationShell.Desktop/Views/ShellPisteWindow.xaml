@@ -6,6 +6,101 @@
         WindowStartupLocation="CenterScreen"
         Background="#0F1923">
 
+    <Window.Resources>
+        <!-- ComboBox dark theme -->
+        <Style TargetType="{x:Type ComboBox}">
+            <Setter Property="Background" Value="#0F3460"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#1A4A80"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="6,4"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ComboBox}">
+                        <Grid>
+                            <Border x:Name="Border"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="22"/>
+                                    </Grid.ColumnDefinitions>
+                                    <ContentPresenter Grid.Column="0"
+                                                      IsHitTestVisible="False"
+                                                      Content="{TemplateBinding SelectionBoxItem}"
+                                                      ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                                      Margin="{TemplateBinding Padding}"
+                                                      VerticalAlignment="Center"/>
+                                    <ToggleButton Grid.Column="0" Grid.ColumnSpan="2"
+                                                  Focusable="False"
+                                                  IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                  ClickMode="Press">
+                                        <ToggleButton.Template>
+                                            <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                                <Border Background="Transparent"/>
+                                            </ControlTemplate>
+                                        </ToggleButton.Template>
+                                    </ToggleButton>
+                                    <Path Grid.Column="1"
+                                          Fill="#FFC200"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Data="M 0 0 L 4 4 L 8 0 Z"
+                                          IsHitTestVisible="False"/>
+                                </Grid>
+                            </Border>
+                            <Popup x:Name="PART_Popup"
+                                   Placement="Bottom"
+                                   IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   AllowsTransparency="True"
+                                   Focusable="False"
+                                   PopupAnimation="Slide">
+                                <Border Background="#0F3460"
+                                        BorderBrush="#1A4A80"
+                                        BorderThickness="1"
+                                        MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                    <ScrollViewer>
+                                        <ItemsPresenter/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDropDownOpen" Value="True">
+                                <Setter TargetName="Border" Property="BorderBrush" Value="#FFC200"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ComboBoxItem dark theme -->
+        <Style TargetType="{x:Type ComboBoxItem}">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="8,5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+                        <Border x:Name="Bd" Background="#0F3460" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#1A4A80"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#DD1F26"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="220"/>
@@ -109,7 +204,7 @@
                     <StackPanel VerticalAlignment="Center">
                         <TextBlock x:Name="TxtPageTitre" Text="Indexes Pompes"
                                    FontSize="20" FontWeight="Bold" Foreground="White"/>
-                        <TextBlock x:Name="TxtDateJour" FontSize="11" Foreground="#555577"/>
+                        <TextBlock x:Name="TxtDateJour" FontSize="11" Foreground="#7898B0"/>
                     </StackPanel>
                 </DockPanel>
             </Border>
@@ -155,7 +250,7 @@
                     </Border>
 
                     <!-- Ligne Pompe 1 - Super -->
-                    <Border Background="#0A1628" Padding="10,6" Margin="0,2">
+                    <Border Background="#0E2848" Padding="10,6" Margin="0,2">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="70"/>
@@ -169,31 +264,31 @@
                                 <ColumnDefinition Width="100"/>
                             </Grid.ColumnDefinitions>
                             <ComboBox Grid.Column="0" Margin="0,0,5,0" Height="32"
-                                      Background="#0F3460" Foreground="White">
+                                      Background="#0F3460" Foreground="#FFC200">
                                 <ComboBoxItem Content="Îlot 1" IsSelected="True"/>
                                 <ComboBoxItem Content="Îlot 2"/>
                                 <ComboBoxItem Content="Îlot 3"/>
                             </ComboBox>
                             <ComboBox Grid.Column="1" Margin="0,0,5,0" Height="32"
-                                      Background="#0F3460" Foreground="White">
+                                      Background="#0F3460" Foreground="#8BAFD4">
                                 <ComboBoxItem Content="P1" IsSelected="True"/>
                                 <ComboBoxItem Content="P2"/>
                                 <ComboBoxItem Content="P3"/>
                             </ComboBox>
                             <ComboBox Grid.Column="2" Margin="0,0,5,0" Height="32"
                                       x:Name="CbCarb1"
-                                      Background="#0F3460" Foreground="White"
+                                      Background="#0F3460" Foreground="#FFC200"
                                       SelectionChanged="Carburant_Changed">
                                 <ComboBoxItem Content="Super" IsSelected="True"/>
                                 <ComboBoxItem Content="Gasoil"/>
                             </ComboBox>
                             <ComboBox Grid.Column="3" Margin="0,0,5,0" Height="32"
-                                      Background="#0F3460" Foreground="White">
+                                      Background="#0F3460" Foreground="#E0EDFF">
                                 <ComboBoxItem Content="-- Pompiste --"/>
                             </ComboBox>
                             <TextBox Grid.Column="4" Margin="0,0,5,0" Height="32"
-                                     Background="#1A2D50" Foreground="#888888"
-                                     BorderBrush="#333355" BorderThickness="0,0,0,1"
+                                     Background="#1A2D50" Foreground="#8BAFD4"
+                                     BorderBrush="#2A4060" BorderThickness="0,0,0,1"
                                      Padding="6,4" IsReadOnly="True" Text="0.00"/>
                             <TextBox Grid.Column="5" Margin="0,0,5,0" Height="32"
                                      x:Name="TxtArr1"
@@ -217,7 +312,7 @@
                     </Border>
 
                     <!-- Ligne Pompe 1 - Gasoil -->
-                    <Border Background="#0A1628" Padding="10,6" Margin="0,2">
+                    <Border Background="#0E2848" Padding="10,6" Margin="0,2">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="70"/>
@@ -231,31 +326,31 @@
                                 <ColumnDefinition Width="100"/>
                             </Grid.ColumnDefinitions>
                             <ComboBox Grid.Column="0" Margin="0,0,5,0" Height="32"
-                                      Background="#0F3460" Foreground="White">
+                                      Background="#0F3460" Foreground="#FFC200">
                                 <ComboBoxItem Content="Îlot 1" IsSelected="True"/>
                                 <ComboBoxItem Content="Îlot 2"/>
                                 <ComboBoxItem Content="Îlot 3"/>
                             </ComboBox>
                             <ComboBox Grid.Column="1" Margin="0,0,5,0" Height="32"
-                                      Background="#0F3460" Foreground="White">
+                                      Background="#0F3460" Foreground="#8BAFD4">
                                 <ComboBoxItem Content="P1" IsSelected="True"/>
                                 <ComboBoxItem Content="P2"/>
                                 <ComboBoxItem Content="P3"/>
                             </ComboBox>
                             <ComboBox Grid.Column="2" Margin="0,0,5,0" Height="32"
                                       x:Name="CbCarb2"
-                                      Background="#0F3460" Foreground="White"
+                                      Background="#0F3460" Foreground="#FFC200"
                                       SelectionChanged="Carburant_Changed">
                                 <ComboBoxItem Content="Super"/>
                                 <ComboBoxItem Content="Gasoil" IsSelected="True"/>
                             </ComboBox>
                             <ComboBox Grid.Column="3" Margin="0,0,5,0" Height="32"
-                                      Background="#0F3460" Foreground="White">
+                                      Background="#0F3460" Foreground="#E0EDFF">
                                 <ComboBoxItem Content="-- Pompiste --"/>
                             </ComboBox>
                             <TextBox Grid.Column="4" Margin="0,0,5,0" Height="32"
-                                     Background="#1A2D50" Foreground="#888888"
-                                     BorderBrush="#333355" BorderThickness="0,0,0,1"
+                                     Background="#1A2D50" Foreground="#8BAFD4"
+                                     BorderBrush="#2A4060" BorderThickness="0,0,0,1"
                                      Padding="6,4" IsReadOnly="True" Text="0.00"/>
                             <TextBox Grid.Column="5" Margin="0,0,5,0" Height="32"
                                      x:Name="TxtArr2"
@@ -279,7 +374,7 @@
                     </Border>
 
                     <!-- Ligne Pompe 2 - Super -->
-                    <Border Background="#0A1628" Padding="10,6" Margin="0,2">
+                    <Border Background="#0E2848" Padding="10,6" Margin="0,2">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="70"/>
@@ -293,31 +388,31 @@
                                 <ColumnDefinition Width="100"/>
                             </Grid.ColumnDefinitions>
                             <ComboBox Grid.Column="0" Margin="0,0,5,0" Height="32"
-                                      Background="#0F3460" Foreground="White">
+                                      Background="#0F3460" Foreground="#FFC200">
                                 <ComboBoxItem Content="Îlot 1"/>
                                 <ComboBoxItem Content="Îlot 2" IsSelected="True"/>
                                 <ComboBoxItem Content="Îlot 3"/>
                             </ComboBox>
                             <ComboBox Grid.Column="1" Margin="0,0,5,0" Height="32"
-                                      Background="#0F3460" Foreground="White">
+                                      Background="#0F3460" Foreground="#8BAFD4">
                                 <ComboBoxItem Content="P1"/>
                                 <ComboBoxItem Content="P2" IsSelected="True"/>
                                 <ComboBoxItem Content="P3"/>
                             </ComboBox>
                             <ComboBox Grid.Column="2" Margin="0,0,5,0" Height="32"
                                       x:Name="CbCarb3"
-                                      Background="#0F3460" Foreground="White"
+                                      Background="#0F3460" Foreground="#FFC200"
                                       SelectionChanged="Carburant_Changed">
                                 <ComboBoxItem Content="Super" IsSelected="True"/>
                                 <ComboBoxItem Content="Gasoil"/>
                             </ComboBox>
                             <ComboBox Grid.Column="3" Margin="0,0,5,0" Height="32"
-                                      Background="#0F3460" Foreground="White">
+                                      Background="#0F3460" Foreground="#E0EDFF">
                                 <ComboBoxItem Content="-- Pompiste --"/>
                             </ComboBox>
                             <TextBox Grid.Column="4" Margin="0,0,5,0" Height="32"
-                                     Background="#1A2D50" Foreground="#888888"
-                                     BorderBrush="#333355" BorderThickness="0,0,0,1"
+                                     Background="#1A2D50" Foreground="#8BAFD4"
+                                     BorderBrush="#2A4060" BorderThickness="0,0,0,1"
                                      Padding="6,4" IsReadOnly="True" Text="0.00"/>
                             <TextBox Grid.Column="5" Margin="0,0,5,0" Height="32"
                                      x:Name="TxtArr3"
@@ -341,7 +436,7 @@
                     </Border>
 
                     <!-- Ligne Pompe 2 - Gasoil -->
-                    <Border Background="#0A1628" Padding="10,6" Margin="0,2">
+                    <Border Background="#0E2848" Padding="10,6" Margin="0,2">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="70"/>
@@ -355,31 +450,31 @@
                                 <ColumnDefinition Width="100"/>
                             </Grid.ColumnDefinitions>
                             <ComboBox Grid.Column="0" Margin="0,0,5,0" Height="32"
-                                      Background="#0F3460" Foreground="White">
+                                      Background="#0F3460" Foreground="#FFC200">
                                 <ComboBoxItem Content="Îlot 1"/>
                                 <ComboBoxItem Content="Îlot 2" IsSelected="True"/>
                                 <ComboBoxItem Content="Îlot 3"/>
                             </ComboBox>
                             <ComboBox Grid.Column="1" Margin="0,0,5,0" Height="32"
-                                      Background="#0F3460" Foreground="White">
+                                      Background="#0F3460" Foreground="#8BAFD4">
                                 <ComboBoxItem Content="P1"/>
                                 <ComboBoxItem Content="P2" IsSelected="True"/>
                                 <ComboBoxItem Content="P3"/>
                             </ComboBox>
                             <ComboBox Grid.Column="2" Margin="0,0,5,0" Height="32"
                                       x:Name="CbCarb4"
-                                      Background="#0F3460" Foreground="White"
+                                      Background="#0F3460" Foreground="#FFC200"
                                       SelectionChanged="Carburant_Changed">
                                 <ComboBoxItem Content="Super"/>
                                 <ComboBoxItem Content="Gasoil" IsSelected="True"/>
                             </ComboBox>
                             <ComboBox Grid.Column="3" Margin="0,0,5,0" Height="32"
-                                      Background="#0F3460" Foreground="White">
+                                      Background="#0F3460" Foreground="#E0EDFF">
                                 <ComboBoxItem Content="-- Pompiste --"/>
                             </ComboBox>
                             <TextBox Grid.Column="4" Margin="0,0,5,0" Height="32"
-                                     Background="#1A2D50" Foreground="#888888"
-                                     BorderBrush="#333355" BorderThickness="0,0,0,1"
+                                     Background="#1A2D50" Foreground="#8BAFD4"
+                                     BorderBrush="#2A4060" BorderThickness="0,0,0,1"
                                      Padding="6,4" IsReadOnly="True" Text="0.00"/>
                             <TextBox Grid.Column="5" Margin="0,0,5,0" Height="32"
                                      x:Name="TxtArr4"
@@ -403,7 +498,7 @@
                     </Border>
 
                     <!-- Ligne Pompe 3 - Super -->
-                    <Border Background="#0A1628" Padding="10,6" Margin="0,2">
+                    <Border Background="#0E2848" Padding="10,6" Margin="0,2">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="70"/>
@@ -417,31 +512,31 @@
                                 <ColumnDefinition Width="100"/>
                             </Grid.ColumnDefinitions>
                             <ComboBox Grid.Column="0" Margin="0,0,5,0" Height="32"
-                                      Background="#0F3460" Foreground="White">
+                                      Background="#0F3460" Foreground="#FFC200">
                                 <ComboBoxItem Content="Îlot 1"/>
                                 <ComboBoxItem Content="Îlot 2"/>
                                 <ComboBoxItem Content="Îlot 3" IsSelected="True"/>
                             </ComboBox>
                             <ComboBox Grid.Column="1" Margin="0,0,5,0" Height="32"
-                                      Background="#0F3460" Foreground="White">
+                                      Background="#0F3460" Foreground="#8BAFD4">
                                 <ComboBoxItem Content="P1"/>
                                 <ComboBoxItem Content="P2"/>
                                 <ComboBoxItem Content="P3" IsSelected="True"/>
                             </ComboBox>
                             <ComboBox Grid.Column="2" Margin="0,0,5,0" Height="32"
                                       x:Name="CbCarb5"
-                                      Background="#0F3460" Foreground="White"
+                                      Background="#0F3460" Foreground="#FFC200"
                                       SelectionChanged="Carburant_Changed">
                                 <ComboBoxItem Content="Super" IsSelected="True"/>
                                 <ComboBoxItem Content="Gasoil"/>
                             </ComboBox>
                             <ComboBox Grid.Column="3" Margin="0,0,5,0" Height="32"
-                                      Background="#0F3460" Foreground="White">
+                                      Background="#0F3460" Foreground="#E0EDFF">
                                 <ComboBoxItem Content="-- Pompiste --"/>
                             </ComboBox>
                             <TextBox Grid.Column="4" Margin="0,0,5,0" Height="32"
-                                     Background="#1A2D50" Foreground="#888888"
-                                     BorderBrush="#333355" BorderThickness="0,0,0,1"
+                                     Background="#1A2D50" Foreground="#8BAFD4"
+                                     BorderBrush="#2A4060" BorderThickness="0,0,0,1"
                                      Padding="6,4" IsReadOnly="True" Text="0.00"/>
                             <TextBox Grid.Column="5" Margin="0,0,5,0" Height="32"
                                      x:Name="TxtArr5"
@@ -465,7 +560,7 @@
                     </Border>
 
                     <!-- Ligne Pompe 3 - Gasoil -->
-                    <Border Background="#0A1628" Padding="10,6" Margin="0,2">
+                    <Border Background="#0E2848" Padding="10,6" Margin="0,2">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="70"/>
@@ -479,31 +574,31 @@
                                 <ColumnDefinition Width="100"/>
                             </Grid.ColumnDefinitions>
                             <ComboBox Grid.Column="0" Margin="0,0,5,0" Height="32"
-                                      Background="#0F3460" Foreground="White">
+                                      Background="#0F3460" Foreground="#FFC200">
                                 <ComboBoxItem Content="Îlot 1"/>
                                 <ComboBoxItem Content="Îlot 2"/>
                                 <ComboBoxItem Content="Îlot 3" IsSelected="True"/>
                             </ComboBox>
                             <ComboBox Grid.Column="1" Margin="0,0,5,0" Height="32"
-                                      Background="#0F3460" Foreground="White">
+                                      Background="#0F3460" Foreground="#8BAFD4">
                                 <ComboBoxItem Content="P1"/>
                                 <ComboBoxItem Content="P2"/>
                                 <ComboBoxItem Content="P3" IsSelected="True"/>
                             </ComboBox>
                             <ComboBox Grid.Column="2" Margin="0,0,5,0" Height="32"
                                       x:Name="CbCarb6"
-                                      Background="#0F3460" Foreground="White"
+                                      Background="#0F3460" Foreground="#FFC200"
                                       SelectionChanged="Carburant_Changed">
                                 <ComboBoxItem Content="Super"/>
                                 <ComboBoxItem Content="Gasoil" IsSelected="True"/>
                             </ComboBox>
                             <ComboBox Grid.Column="3" Margin="0,0,5,0" Height="32"
-                                      Background="#0F3460" Foreground="White">
+                                      Background="#0F3460" Foreground="#E0EDFF">
                                 <ComboBoxItem Content="-- Pompiste --"/>
                             </ComboBox>
                             <TextBox Grid.Column="4" Margin="0,0,5,0" Height="32"
-                                     Background="#1A2D50" Foreground="#888888"
-                                     BorderBrush="#333355" BorderThickness="0,0,0,1"
+                                     Background="#1A2D50" Foreground="#8BAFD4"
+                                     BorderBrush="#2A4060" BorderThickness="0,0,0,1"
                                      Padding="6,4" IsReadOnly="True" Text="0.00"/>
                             <TextBox Grid.Column="5" Margin="0,0,5,0" Height="32"
                                      x:Name="TxtArr6"
@@ -585,7 +680,7 @@
 
                     <!-- TITRE + DATE -->
                     <TextBlock Text="Caisse du jour" FontSize="15" FontWeight="Bold"
-                            Foreground="#888888" Margin="0,0,0,20"/>
+                            Foreground="#8BAFD4" Margin="0,0,0,20"/>
 
                     <!-- CAISSE PAR POMPISTE -->
                     <TextBlock Text="PAR POMPISTE" FontSize="11" FontWeight="Bold"
@@ -637,7 +732,7 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Text="-- Non affecté --"
-                                    Foreground="#666688" FontSize="12" VerticalAlignment="Center"/>
+                                    Foreground="#7898B0" FontSize="12" VerticalAlignment="Center"/>
                             <TextBlock Grid.Column="1" Text="P1" Foreground="White"
                                     FontSize="12" VerticalAlignment="Center"/>
                             <TextBlock Grid.Column="2" x:Name="TxtCaisseP1Super"
@@ -684,7 +779,7 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Text="-- Non affecté --"
-                                    Foreground="#666688" FontSize="12" VerticalAlignment="Center"/>
+                                    Foreground="#7898B0" FontSize="12" VerticalAlignment="Center"/>
                             <TextBlock Grid.Column="1" Text="P2" Foreground="White"
                                     FontSize="12" VerticalAlignment="Center"/>
                             <TextBlock Grid.Column="2" x:Name="TxtCaisseP2Super"
@@ -731,7 +826,7 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Text="-- Non affecté --"
-                                    Foreground="#666688" FontSize="12" VerticalAlignment="Center"/>
+                                    Foreground="#7898B0" FontSize="12" VerticalAlignment="Center"/>
                             <TextBlock Grid.Column="1" Text="P3" Foreground="White"
                                     FontSize="12" VerticalAlignment="Center"/>
                             <TextBlock Grid.Column="2" x:Name="TxtCaisseP3Super"
