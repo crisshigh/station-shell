@@ -109,17 +109,31 @@ Admin
 - Menu de navigation : clic sur "Piste" → ouvre `ShellPisteWindow`
 - Design dark theme cohérent
 
-### 3. ShellPisteWindow (`Views/ShellPisteWindow.xaml`)
-- Grille de saisie des index : 3 pompes × 2 carburants = 6 lignes
-- Calcul automatique des quantités et totaux
-- Boutons : Enregistrer / Valider
-- Thème sombre personnalisé (ComboBox, styles WPF)
+### 3. ShellPisteWindow (`Views/ShellPisteWindow.xaml` + `.xaml.cs`)
+Interface principale de gestion de la piste — **entièrement refaite** (session 2026-05-18).
+Menu latéral avec 4 panels : Indexes Pompes · Caisse du Jour · Cuves · Ventes Piste.
 
-### 4. Caisse du Jour *(intégrée dans ShellPisteWindow)*
-- Tableau par pompiste avec décharges
-- Section prélèvements globaux (charges + avances sur salaire)
-- Récapitulatif journalier avec total net
-- Bouton de clôture
+**Panel Indexes (5 sections) :**
+- **Sect. 1 — Agent & Plage horaire** : ComboBox agent + DatePickers début/fin + champs heure
+- **Sect. 2 — Indexes Pompes** : grille 8 colonnes (Îlot, Pompe, Carburant, Idx Départ, Idx Arrivée, Qté, P.U, Montant) · 6 lignes · calcul auto Qté et Montant · ligne TOTAL GÉNÉRAL
+- **Sect. 3 — Moyens de paiement** : TPE, WAVE, Orange Money, Cash calculé automatiquement (= Total carburant − TPE − WAVE − Orange)
+- **Sect. 4 — Prélèvements** : 3 colonnes — A. Charges/Dépenses du jour (liste dynamique), B. Bons (bénéficiaire + type), C. Décharges (montant + motif)
+- **Sect. 5 — Résumé Caisse Carburant** : récap total carb + détail paiements + champ "total versé par l'agent" + calcul écart + boutons Enregistrer Manquant / Sauvegarder / Valider
+
+**Panel Caisse du Jour** : tableau par pompiste (Super L, Gasoil L, Ventes Brutes, Décharges, Net à remettre) · Prélèvements globaux (Charges + Avances sur salaire) · Récapitulatif global (Caisse Nette) · Bouton Clôturer
+
+**Panel Cuves** : saisie quantité actuelle Super et Gasoil
+
+**Panel Ventes Piste** : placeholder (aucune vente enregistrée)
+
+**Code-behind :**
+- Guard `_isLoaded` · `ShowPanel()` pour navigation entre les 4 panels
+- Calcul automatique : `IndexArrivee_Changed` → `CalculerLigne` → `CalculerTotaux` → `RecalculerCash` → `RecalculerResume`
+- `Ilot_Changed` : synchronise le ComboBox Pompe selon l'Îlot choisi
+- `Carburant_Changed` : met à jour le prix unitaire et recalcule
+- Handlers Section 4 : `BtnAjouterDepense_Click`, `BtnAjouterBon_Click`, `BtnAjouterDecharge_Click` + helper `AjouterLigneListe`
+- `BtnEnregistrerManquant_Click` : vérifie l'écart et demande confirmation
+- Caisse panel : `BtnDecharge_Click`, `BtnAjouterCharge_Click`, `BtnAjouterAvance_Click`, `MettreAJourCaisse`
 
 ---
 
@@ -157,14 +171,19 @@ App démarrage
 - [x] Structure backend Rust/Axum (main.rs + db/mod.rs + Cargo.toml)
 
 ### En cours 🔄
-- [ ] Modifications récentes sur `ShellPisteWindow.xaml` (non commitées)
+- [ ] ShellPisteWindow refaite mais **non commitée** (modifications en attente de commit)
+- [ ] Logique de persistance (boutons Sauvegarder / Valider / Clôturer → TODO en dur, API Rust non connectée)
 
 ### À faire 📋
+- [ ] Commit des modifications actuelles sur `ShellPisteWindow.xaml` et `.xaml.cs`
 - [ ] Remplacer l'authentification hardcodée par un appel à l'API Rust
 - [ ] Connexion API Rust ↔ Frontend WPF (endpoints à implémenter)
 - [ ] Gestion des rôles (Manager, Chef de Piste, etc.) dans le routing post-login
+- [ ] Panel Cuves : brancher la mise à jour réelle des quantités
+- [ ] Panel Ventes Piste : implémenter la liste des ventes
+- [ ] Agents dynamiques dans CbAgent (depuis la BDD, pas statiques)
 - [ ] Module Shell Shop (inventaire, POS)
-- [ ] Tests et validation des règles métier en bout en bout
+- [ ] Tests et validation des règles métier bout en bout
 
 ---
 
@@ -175,7 +194,8 @@ App démarrage
 | 2026-04-08 | Schéma BDD étendu à 21 tables, ShellPisteWindow et Caisse du Jour créés, règles métier documentées |
 | 2026-04-08 | Ajout LoginWindow (auth provisoire), AdminDashboard avec navigation, initialisation backend Rust/Axum |
 | 2026-05-14 | Lecture du projet, lancement de l'app WPF (`dotnet run`), mise à jour de CONTEXT.md pour refléter l'état réel du code |
+| 2026-05-18 | ShellPisteWindow entièrement refaite : menu latéral 4 panels (Indexes, Caisse, Cuves, Ventes), 5 sections dans le panel Indexes (Agent/Plage, Grille pompes, Paiements, Prélèvements, Résumé caisse), calculs automatiques cash/écart, modifications non commitées |
 
 ---
 
-*Dernière mise à jour : 2026-05-14 (Claude Code — session)*
+*Dernière mise à jour : 2026-05-18 (Claude Code — session)*

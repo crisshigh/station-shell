@@ -2,12 +2,11 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Shell Piste — Gestion de la Piste"
-        Height="750" Width="1300"
+        Height="800" Width="1300"
         WindowStartupLocation="CenterScreen"
         Background="#0F1923">
 
     <Window.Resources>
-        <!-- ComboBox dark theme -->
         <Style TargetType="{x:Type ComboBox}">
             <Setter Property="Background" Value="#0F3460"/>
             <Setter Property="Foreground" Value="White"/>
@@ -77,7 +76,6 @@
             </Setter>
         </Style>
 
-        <!-- ComboBoxItem dark theme -->
         <Style TargetType="{x:Type ComboBoxItem}">
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Padding" Value="8,5"/>
@@ -98,6 +96,13 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+        </Style>
+
+        <Style TargetType="DatePicker">
+            <Setter Property="Background" Value="#0F3460"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#FFC200"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
         </Style>
     </Window.Resources>
 
@@ -214,462 +219,854 @@
                           VerticalScrollBarVisibility="Auto" Visibility="Visible">
                 <StackPanel Margin="20">
 
-                    <!-- En-tête colonnes -->
-                    <Border Background="#0D1F3C" Padding="10,8" Margin="0,0,0,5">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="70"/>
-                                <ColumnDefinition Width="80"/>
-                                <ColumnDefinition Width="90"/>
-                                <ColumnDefinition Width="140"/>
-                                <ColumnDefinition Width="110"/>
-                                <ColumnDefinition Width="110"/>
-                                <ColumnDefinition Width="90"/>
-                                <ColumnDefinition Width="80"/>
-                                <ColumnDefinition Width="100"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="ÎLOT" FontSize="10"
-                                       FontWeight="Bold" Foreground="#FFC200"/>
-                            <TextBlock Grid.Column="1" Text="POMPE" FontSize="10"
-                                       FontWeight="Bold" Foreground="#FFC200"/>
-                            <TextBlock Grid.Column="2" Text="CARBURANT" FontSize="10"
-                                       FontWeight="Bold" Foreground="#FFC200"/>
-                            <TextBlock Grid.Column="3" Text="POMPISTE" FontSize="10"
-                                       FontWeight="Bold" Foreground="#FFC200"/>
-                            <TextBlock Grid.Column="4" Text="IDX DÉPART" FontSize="10"
-                                       FontWeight="Bold" Foreground="#FFC200"/>
-                            <TextBlock Grid.Column="5" Text="IDX ARRIVÉE" FontSize="10"
-                                       FontWeight="Bold" Foreground="#FFC200"/>
-                            <TextBlock Grid.Column="6" Text="QTÉ (L)" FontSize="10"
-                                       FontWeight="Bold" Foreground="#FFC200"/>
-                            <TextBlock Grid.Column="7" Text="P.U" FontSize="10"
-                                       FontWeight="Bold" Foreground="#FFC200"/>
-                            <TextBlock Grid.Column="8" Text="MONTANT" FontSize="10"
-                                       FontWeight="Bold" Foreground="#FFC200"/>
-                        </Grid>
+                    <!-- ══════════════════════════════════════════════ -->
+                    <!-- SECTION 1 — AGENT & PLAGE HORAIRE             -->
+                    <!-- ══════════════════════════════════════════════ -->
+                    <Border Background="#0A1628" Margin="0,0,0,12">
+                        <StackPanel>
+                            <Border Background="#0D1F3C" Padding="12,9">
+                                <TextBlock Text="1.  AGENT &amp; PLAGE HORAIRE"
+                                           FontSize="11" FontWeight="Bold" Foreground="#FFC200"/>
+                            </Border>
+                            <Border Padding="15,12">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="260"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Agent -->
+                                    <StackPanel Grid.Column="0" Margin="0,0,25,0">
+                                        <TextBlock Text="AGENT RESPONSABLE" FontSize="10"
+                                                   FontWeight="Bold" Foreground="#FFC200" Margin="0,0,0,6"/>
+                                        <ComboBox x:Name="CbAgent" Height="34">
+                                            <ComboBoxItem Content="-- Choisir un agent --" IsSelected="True"/>
+                                            <ComboBoxItem Content="Pompiste 1"/>
+                                            <ComboBoxItem Content="Pompiste 2"/>
+                                            <ComboBoxItem Content="Pompiste 3"/>
+                                        </ComboBox>
+                                    </StackPanel>
+
+                                    <!-- Plage horaire -->
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Text="PLAGE HORAIRE" FontSize="10"
+                                                   FontWeight="Bold" Foreground="#FFC200" Margin="0,0,0,6"/>
+                                        <StackPanel Orientation="Horizontal">
+                                            <StackPanel Margin="0,0,8,0">
+                                                <TextBlock Text="Date début" FontSize="10"
+                                                           Foreground="#7898B0" Margin="0,0,0,3"/>
+                                                <DatePicker x:Name="DpDebut" Width="148" Height="34"/>
+                                            </StackPanel>
+                                            <StackPanel Margin="0,0,20,0">
+                                                <TextBlock Text="Heure" FontSize="10"
+                                                           Foreground="#7898B0" Margin="0,0,0,3"/>
+                                                <TextBox x:Name="TxtHeureDebut" Width="68" Height="34"
+                                                         Background="#0F3460" Foreground="White"
+                                                         BorderBrush="#FFC200" BorderThickness="0,0,0,1"
+                                                         Padding="6,4" TextAlignment="Center"/>
+                                            </StackPanel>
+                                            <TextBlock Text="→" FontSize="18" Foreground="#7898B0"
+                                                       VerticalAlignment="Bottom" Margin="0,0,20,4"/>
+                                            <StackPanel Margin="0,0,8,0">
+                                                <TextBlock Text="Date fin" FontSize="10"
+                                                           Foreground="#7898B0" Margin="0,0,0,3"/>
+                                                <DatePicker x:Name="DpFin" Width="148" Height="34"/>
+                                            </StackPanel>
+                                            <StackPanel>
+                                                <TextBlock Text="Heure" FontSize="10"
+                                                           Foreground="#7898B0" Margin="0,0,0,3"/>
+                                                <TextBox x:Name="TxtHeureFin" Width="68" Height="34"
+                                                         Background="#0F3460" Foreground="White"
+                                                         BorderBrush="#FFC200" BorderThickness="0,0,0,1"
+                                                         Padding="6,4" TextAlignment="Center"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
                     </Border>
 
-                    <!-- Ligne Pompe 1 - Super -->
-                    <Border Background="#0E2848" Padding="10,6" Margin="0,2">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="70"/>
-                                <ColumnDefinition Width="80"/>
-                                <ColumnDefinition Width="90"/>
-                                <ColumnDefinition Width="140"/>
-                                <ColumnDefinition Width="110"/>
-                                <ColumnDefinition Width="110"/>
-                                <ColumnDefinition Width="90"/>
-                                <ColumnDefinition Width="80"/>
-                                <ColumnDefinition Width="100"/>
-                            </Grid.ColumnDefinitions>
-                            <ComboBox Grid.Column="0" Margin="0,0,5,0" Height="32"
-                                      Background="#0F3460" Foreground="#FFC200">
-                                <ComboBoxItem Content="Îlot 1" IsSelected="True"/>
-                                <ComboBoxItem Content="Îlot 2"/>
-                                <ComboBoxItem Content="Îlot 3"/>
-                            </ComboBox>
-                            <ComboBox Grid.Column="1" Margin="0,0,5,0" Height="32"
-                                      Background="#0F3460" Foreground="#8BAFD4">
-                                <ComboBoxItem Content="P1" IsSelected="True"/>
-                                <ComboBoxItem Content="P2"/>
-                                <ComboBoxItem Content="P3"/>
-                            </ComboBox>
-                            <ComboBox Grid.Column="2" Margin="0,0,5,0" Height="32"
-                                      x:Name="CbCarb1"
-                                      Background="#0F3460" Foreground="#FFC200"
-                                      SelectionChanged="Carburant_Changed">
-                                <ComboBoxItem Content="Super" IsSelected="True"/>
-                                <ComboBoxItem Content="Gasoil"/>
-                            </ComboBox>
-                            <ComboBox Grid.Column="3" Margin="0,0,5,0" Height="32"
-                                      Background="#0F3460" Foreground="#E0EDFF">
-                                <ComboBoxItem Content="-- Pompiste --"/>
-                            </ComboBox>
-                            <TextBox Grid.Column="4" Margin="0,0,5,0" Height="32"
-                                     Background="#1A2D50" Foreground="#8BAFD4"
-                                     BorderBrush="#2A4060" BorderThickness="0,0,0,1"
-                                     Padding="6,4" IsReadOnly="True" Text="0.00"/>
-                            <TextBox Grid.Column="5" Margin="0,0,5,0" Height="32"
-                                     x:Name="TxtArr1"
-                                     Background="#0F3460" Foreground="White"
-                                     BorderBrush="#FFC200" BorderThickness="0,0,0,2"
-                                     Padding="6,4" TextChanged="IndexArrivee_Changed"/>
-                            <TextBox Grid.Column="6" Margin="0,0,5,0" Height="32"
-                                     Background="#1A2D50" Foreground="#00C896"
-                                     BorderThickness="0" Padding="6,4"
-                                     IsReadOnly="True" x:Name="TxtQte1"/>
-                            <TextBox Grid.Column="7" Margin="0,0,5,0" Height="32"
-                                     x:Name="TxtPu1"
-                                     Background="#1A2D50" Foreground="#FFC200"
-                                     BorderThickness="0" Padding="6,4"
-                                     IsReadOnly="True" Text="920"/>
-                            <TextBox Grid.Column="8" Height="32"
-                                     Background="#1A2D50" Foreground="White"
-                                     BorderThickness="0" Padding="6,4"
-                                     IsReadOnly="True" x:Name="TxtTotal1"/>
-                        </Grid>
+                    <!-- ══════════════════════════════════════════════ -->
+                    <!-- SECTION 2 — INDEXES POMPES                    -->
+                    <!-- ══════════════════════════════════════════════ -->
+                    <Border Background="#0A1628" Margin="0,0,0,12">
+                        <StackPanel>
+                            <Border Background="#0D1F3C" Padding="12,9">
+                                <TextBlock Text="2.  INDEXES POMPES"
+                                           FontSize="11" FontWeight="Bold" Foreground="#FFC200"/>
+                            </Border>
+                            <StackPanel Margin="10,8,10,10">
+
+                                <!-- En-tête colonnes (8 col, sans POMPISTE) -->
+                                <Border Background="#0D1F3C" Padding="10,8" Margin="0,0,0,4">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="70"/>
+                                            <ColumnDefinition Width="80"/>
+                                            <ColumnDefinition Width="90"/>
+                                            <ColumnDefinition Width="110"/>
+                                            <ColumnDefinition Width="110"/>
+                                            <ColumnDefinition Width="90"/>
+                                            <ColumnDefinition Width="80"/>
+                                            <ColumnDefinition Width="110"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="ÎLOT" FontSize="10" FontWeight="Bold" Foreground="#FFC200"/>
+                                        <TextBlock Grid.Column="1" Text="POMPE" FontSize="10" FontWeight="Bold" Foreground="#FFC200"/>
+                                        <TextBlock Grid.Column="2" Text="CARBURANT" FontSize="10" FontWeight="Bold" Foreground="#FFC200"/>
+                                        <TextBlock Grid.Column="3" Text="IDX DÉPART" FontSize="10" FontWeight="Bold" Foreground="#FFC200"/>
+                                        <TextBlock Grid.Column="4" Text="IDX ARRIVÉE" FontSize="10" FontWeight="Bold" Foreground="#FFC200"/>
+                                        <TextBlock Grid.Column="5" Text="QTÉ (L)" FontSize="10" FontWeight="Bold" Foreground="#FFC200"/>
+                                        <TextBlock Grid.Column="6" Text="P.U" FontSize="10" FontWeight="Bold" Foreground="#FFC200"/>
+                                        <TextBlock Grid.Column="7" Text="MONTANT" FontSize="10" FontWeight="Bold" Foreground="#FFC200"/>
+                                    </Grid>
+                                </Border>
+
+                                <!-- Ligne 1 : Pompe 1 - Super -->
+                                <Border Background="#0E2848" Padding="10,6" Margin="0,2">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="70"/>
+                                            <ColumnDefinition Width="80"/>
+                                            <ColumnDefinition Width="90"/>
+                                            <ColumnDefinition Width="110"/>
+                                            <ColumnDefinition Width="110"/>
+                                            <ColumnDefinition Width="90"/>
+                                            <ColumnDefinition Width="80"/>
+                                            <ColumnDefinition Width="110"/>
+                                        </Grid.ColumnDefinitions>
+                                        <ComboBox Grid.Column="0" x:Name="CbIlot1" Margin="0,0,5,0" Height="32"
+                                                  Background="#0F3460" Foreground="#FFC200"
+                                                  SelectionChanged="Ilot_Changed">
+                                            <ComboBoxItem Content="Îlot 1" IsSelected="True"/>
+                                            <ComboBoxItem Content="Îlot 2"/>
+                                            <ComboBoxItem Content="Îlot 3"/>
+                                        </ComboBox>
+                                        <ComboBox Grid.Column="1" x:Name="CbPompe1" Margin="0,0,5,0" Height="32"
+                                                  Background="#0F3460" Foreground="#8BAFD4">
+                                            <ComboBoxItem Content="P1" IsSelected="True"/>
+                                            <ComboBoxItem Content="P2"/>
+                                            <ComboBoxItem Content="P3"/>
+                                        </ComboBox>
+                                        <ComboBox Grid.Column="2" x:Name="CbCarb1" Margin="0,0,5,0" Height="32"
+                                                  Background="#0F3460" Foreground="#FFC200"
+                                                  SelectionChanged="Carburant_Changed">
+                                            <ComboBoxItem Content="Super" IsSelected="True"/>
+                                            <ComboBoxItem Content="Gasoil"/>
+                                        </ComboBox>
+                                        <TextBox Grid.Column="3" Margin="0,0,5,0" Height="32"
+                                                 Background="#1A2D50" Foreground="#8BAFD4"
+                                                 BorderBrush="#2A4060" BorderThickness="0,0,0,1"
+                                                 Padding="6,4" IsReadOnly="True" Text="0.00"/>
+                                        <TextBox Grid.Column="4" x:Name="TxtArr1" Margin="0,0,5,0" Height="32"
+                                                 Background="#0F3460" Foreground="White"
+                                                 BorderBrush="#FFC200" BorderThickness="0,0,0,2"
+                                                 Padding="6,4" TextChanged="IndexArrivee_Changed"/>
+                                        <TextBox Grid.Column="5" x:Name="TxtQte1" Margin="0,0,5,0" Height="32"
+                                                 Background="#1A2D50" Foreground="#00C896"
+                                                 BorderThickness="0" Padding="6,4" IsReadOnly="True"/>
+                                        <TextBox Grid.Column="6" x:Name="TxtPu1" Margin="0,0,5,0" Height="32"
+                                                 Background="#1A2D50" Foreground="#FFC200"
+                                                 BorderThickness="0" Padding="6,4"
+                                                 IsReadOnly="True" Text="920"/>
+                                        <TextBox Grid.Column="7" x:Name="TxtTotal1" Height="32"
+                                                 Background="#1A2D50" Foreground="White"
+                                                 BorderThickness="0" Padding="6,4" IsReadOnly="True"/>
+                                    </Grid>
+                                </Border>
+
+                                <!-- Ligne 2 : Pompe 1 - Gasoil -->
+                                <Border Background="#0E2848" Padding="10,6" Margin="0,2">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="70"/>
+                                            <ColumnDefinition Width="80"/>
+                                            <ColumnDefinition Width="90"/>
+                                            <ColumnDefinition Width="110"/>
+                                            <ColumnDefinition Width="110"/>
+                                            <ColumnDefinition Width="90"/>
+                                            <ColumnDefinition Width="80"/>
+                                            <ColumnDefinition Width="110"/>
+                                        </Grid.ColumnDefinitions>
+                                        <ComboBox Grid.Column="0" x:Name="CbIlot2" Margin="0,0,5,0" Height="32"
+                                                  Background="#0F3460" Foreground="#FFC200"
+                                                  SelectionChanged="Ilot_Changed">
+                                            <ComboBoxItem Content="Îlot 1" IsSelected="True"/>
+                                            <ComboBoxItem Content="Îlot 2"/>
+                                            <ComboBoxItem Content="Îlot 3"/>
+                                        </ComboBox>
+                                        <ComboBox Grid.Column="1" x:Name="CbPompe2" Margin="0,0,5,0" Height="32"
+                                                  Background="#0F3460" Foreground="#8BAFD4">
+                                            <ComboBoxItem Content="P1" IsSelected="True"/>
+                                            <ComboBoxItem Content="P2"/>
+                                            <ComboBoxItem Content="P3"/>
+                                        </ComboBox>
+                                        <ComboBox Grid.Column="2" x:Name="CbCarb2" Margin="0,0,5,0" Height="32"
+                                                  Background="#0F3460" Foreground="#FFC200"
+                                                  SelectionChanged="Carburant_Changed">
+                                            <ComboBoxItem Content="Super"/>
+                                            <ComboBoxItem Content="Gasoil" IsSelected="True"/>
+                                        </ComboBox>
+                                        <TextBox Grid.Column="3" Margin="0,0,5,0" Height="32"
+                                                 Background="#1A2D50" Foreground="#8BAFD4"
+                                                 BorderBrush="#2A4060" BorderThickness="0,0,0,1"
+                                                 Padding="6,4" IsReadOnly="True" Text="0.00"/>
+                                        <TextBox Grid.Column="4" x:Name="TxtArr2" Margin="0,0,5,0" Height="32"
+                                                 Background="#0F3460" Foreground="White"
+                                                 BorderBrush="#FFC200" BorderThickness="0,0,0,2"
+                                                 Padding="6,4" TextChanged="IndexArrivee_Changed"/>
+                                        <TextBox Grid.Column="5" x:Name="TxtQte2" Margin="0,0,5,0" Height="32"
+                                                 Background="#1A2D50" Foreground="#00C896"
+                                                 BorderThickness="0" Padding="6,4" IsReadOnly="True"/>
+                                        <TextBox Grid.Column="6" x:Name="TxtPu2" Margin="0,0,5,0" Height="32"
+                                                 Background="#1A2D50" Foreground="#FFC200"
+                                                 BorderThickness="0" Padding="6,4"
+                                                 IsReadOnly="True" Text="680"/>
+                                        <TextBox Grid.Column="7" x:Name="TxtTotal2" Height="32"
+                                                 Background="#1A2D50" Foreground="White"
+                                                 BorderThickness="0" Padding="6,4" IsReadOnly="True"/>
+                                    </Grid>
+                                </Border>
+
+                                <!-- Ligne 3 : Pompe 2 - Super -->
+                                <Border Background="#0E2848" Padding="10,6" Margin="0,2">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="70"/>
+                                            <ColumnDefinition Width="80"/>
+                                            <ColumnDefinition Width="90"/>
+                                            <ColumnDefinition Width="110"/>
+                                            <ColumnDefinition Width="110"/>
+                                            <ColumnDefinition Width="90"/>
+                                            <ColumnDefinition Width="80"/>
+                                            <ColumnDefinition Width="110"/>
+                                        </Grid.ColumnDefinitions>
+                                        <ComboBox Grid.Column="0" x:Name="CbIlot3" Margin="0,0,5,0" Height="32"
+                                                  Background="#0F3460" Foreground="#FFC200"
+                                                  SelectionChanged="Ilot_Changed">
+                                            <ComboBoxItem Content="Îlot 1"/>
+                                            <ComboBoxItem Content="Îlot 2" IsSelected="True"/>
+                                            <ComboBoxItem Content="Îlot 3"/>
+                                        </ComboBox>
+                                        <ComboBox Grid.Column="1" x:Name="CbPompe3" Margin="0,0,5,0" Height="32"
+                                                  Background="#0F3460" Foreground="#8BAFD4">
+                                            <ComboBoxItem Content="P1"/>
+                                            <ComboBoxItem Content="P2" IsSelected="True"/>
+                                            <ComboBoxItem Content="P3"/>
+                                        </ComboBox>
+                                        <ComboBox Grid.Column="2" x:Name="CbCarb3" Margin="0,0,5,0" Height="32"
+                                                  Background="#0F3460" Foreground="#FFC200"
+                                                  SelectionChanged="Carburant_Changed">
+                                            <ComboBoxItem Content="Super" IsSelected="True"/>
+                                            <ComboBoxItem Content="Gasoil"/>
+                                        </ComboBox>
+                                        <TextBox Grid.Column="3" Margin="0,0,5,0" Height="32"
+                                                 Background="#1A2D50" Foreground="#8BAFD4"
+                                                 BorderBrush="#2A4060" BorderThickness="0,0,0,1"
+                                                 Padding="6,4" IsReadOnly="True" Text="0.00"/>
+                                        <TextBox Grid.Column="4" x:Name="TxtArr3" Margin="0,0,5,0" Height="32"
+                                                 Background="#0F3460" Foreground="White"
+                                                 BorderBrush="#FFC200" BorderThickness="0,0,0,2"
+                                                 Padding="6,4" TextChanged="IndexArrivee_Changed"/>
+                                        <TextBox Grid.Column="5" x:Name="TxtQte3" Margin="0,0,5,0" Height="32"
+                                                 Background="#1A2D50" Foreground="#00C896"
+                                                 BorderThickness="0" Padding="6,4" IsReadOnly="True"/>
+                                        <TextBox Grid.Column="6" x:Name="TxtPu3" Margin="0,0,5,0" Height="32"
+                                                 Background="#1A2D50" Foreground="#FFC200"
+                                                 BorderThickness="0" Padding="6,4"
+                                                 IsReadOnly="True" Text="920"/>
+                                        <TextBox Grid.Column="7" x:Name="TxtTotal3" Height="32"
+                                                 Background="#1A2D50" Foreground="White"
+                                                 BorderThickness="0" Padding="6,4" IsReadOnly="True"/>
+                                    </Grid>
+                                </Border>
+
+                                <!-- Ligne 4 : Pompe 2 - Gasoil -->
+                                <Border Background="#0E2848" Padding="10,6" Margin="0,2">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="70"/>
+                                            <ColumnDefinition Width="80"/>
+                                            <ColumnDefinition Width="90"/>
+                                            <ColumnDefinition Width="110"/>
+                                            <ColumnDefinition Width="110"/>
+                                            <ColumnDefinition Width="90"/>
+                                            <ColumnDefinition Width="80"/>
+                                            <ColumnDefinition Width="110"/>
+                                        </Grid.ColumnDefinitions>
+                                        <ComboBox Grid.Column="0" x:Name="CbIlot4" Margin="0,0,5,0" Height="32"
+                                                  Background="#0F3460" Foreground="#FFC200"
+                                                  SelectionChanged="Ilot_Changed">
+                                            <ComboBoxItem Content="Îlot 1"/>
+                                            <ComboBoxItem Content="Îlot 2" IsSelected="True"/>
+                                            <ComboBoxItem Content="Îlot 3"/>
+                                        </ComboBox>
+                                        <ComboBox Grid.Column="1" x:Name="CbPompe4" Margin="0,0,5,0" Height="32"
+                                                  Background="#0F3460" Foreground="#8BAFD4">
+                                            <ComboBoxItem Content="P1"/>
+                                            <ComboBoxItem Content="P2" IsSelected="True"/>
+                                            <ComboBoxItem Content="P3"/>
+                                        </ComboBox>
+                                        <ComboBox Grid.Column="2" x:Name="CbCarb4" Margin="0,0,5,0" Height="32"
+                                                  Background="#0F3460" Foreground="#FFC200"
+                                                  SelectionChanged="Carburant_Changed">
+                                            <ComboBoxItem Content="Super"/>
+                                            <ComboBoxItem Content="Gasoil" IsSelected="True"/>
+                                        </ComboBox>
+                                        <TextBox Grid.Column="3" Margin="0,0,5,0" Height="32"
+                                                 Background="#1A2D50" Foreground="#8BAFD4"
+                                                 BorderBrush="#2A4060" BorderThickness="0,0,0,1"
+                                                 Padding="6,4" IsReadOnly="True" Text="0.00"/>
+                                        <TextBox Grid.Column="4" x:Name="TxtArr4" Margin="0,0,5,0" Height="32"
+                                                 Background="#0F3460" Foreground="White"
+                                                 BorderBrush="#FFC200" BorderThickness="0,0,0,2"
+                                                 Padding="6,4" TextChanged="IndexArrivee_Changed"/>
+                                        <TextBox Grid.Column="5" x:Name="TxtQte4" Margin="0,0,5,0" Height="32"
+                                                 Background="#1A2D50" Foreground="#00C896"
+                                                 BorderThickness="0" Padding="6,4" IsReadOnly="True"/>
+                                        <TextBox Grid.Column="6" x:Name="TxtPu4" Margin="0,0,5,0" Height="32"
+                                                 Background="#1A2D50" Foreground="#FFC200"
+                                                 BorderThickness="0" Padding="6,4"
+                                                 IsReadOnly="True" Text="680"/>
+                                        <TextBox Grid.Column="7" x:Name="TxtTotal4" Height="32"
+                                                 Background="#1A2D50" Foreground="White"
+                                                 BorderThickness="0" Padding="6,4" IsReadOnly="True"/>
+                                    </Grid>
+                                </Border>
+
+                                <!-- Ligne 5 : Pompe 3 - Super -->
+                                <Border Background="#0E2848" Padding="10,6" Margin="0,2">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="70"/>
+                                            <ColumnDefinition Width="80"/>
+                                            <ColumnDefinition Width="90"/>
+                                            <ColumnDefinition Width="110"/>
+                                            <ColumnDefinition Width="110"/>
+                                            <ColumnDefinition Width="90"/>
+                                            <ColumnDefinition Width="80"/>
+                                            <ColumnDefinition Width="110"/>
+                                        </Grid.ColumnDefinitions>
+                                        <ComboBox Grid.Column="0" x:Name="CbIlot5" Margin="0,0,5,0" Height="32"
+                                                  Background="#0F3460" Foreground="#FFC200"
+                                                  SelectionChanged="Ilot_Changed">
+                                            <ComboBoxItem Content="Îlot 1"/>
+                                            <ComboBoxItem Content="Îlot 2"/>
+                                            <ComboBoxItem Content="Îlot 3" IsSelected="True"/>
+                                        </ComboBox>
+                                        <ComboBox Grid.Column="1" x:Name="CbPompe5" Margin="0,0,5,0" Height="32"
+                                                  Background="#0F3460" Foreground="#8BAFD4">
+                                            <ComboBoxItem Content="P1"/>
+                                            <ComboBoxItem Content="P2"/>
+                                            <ComboBoxItem Content="P3" IsSelected="True"/>
+                                        </ComboBox>
+                                        <ComboBox Grid.Column="2" x:Name="CbCarb5" Margin="0,0,5,0" Height="32"
+                                                  Background="#0F3460" Foreground="#FFC200"
+                                                  SelectionChanged="Carburant_Changed">
+                                            <ComboBoxItem Content="Super" IsSelected="True"/>
+                                            <ComboBoxItem Content="Gasoil"/>
+                                        </ComboBox>
+                                        <TextBox Grid.Column="3" Margin="0,0,5,0" Height="32"
+                                                 Background="#1A2D50" Foreground="#8BAFD4"
+                                                 BorderBrush="#2A4060" BorderThickness="0,0,0,1"
+                                                 Padding="6,4" IsReadOnly="True" Text="0.00"/>
+                                        <TextBox Grid.Column="4" x:Name="TxtArr5" Margin="0,0,5,0" Height="32"
+                                                 Background="#0F3460" Foreground="White"
+                                                 BorderBrush="#FFC200" BorderThickness="0,0,0,2"
+                                                 Padding="6,4" TextChanged="IndexArrivee_Changed"/>
+                                        <TextBox Grid.Column="5" x:Name="TxtQte5" Margin="0,0,5,0" Height="32"
+                                                 Background="#1A2D50" Foreground="#00C896"
+                                                 BorderThickness="0" Padding="6,4" IsReadOnly="True"/>
+                                        <TextBox Grid.Column="6" x:Name="TxtPu5" Margin="0,0,5,0" Height="32"
+                                                 Background="#1A2D50" Foreground="#FFC200"
+                                                 BorderThickness="0" Padding="6,4"
+                                                 IsReadOnly="True" Text="920"/>
+                                        <TextBox Grid.Column="7" x:Name="TxtTotal5" Height="32"
+                                                 Background="#1A2D50" Foreground="White"
+                                                 BorderThickness="0" Padding="6,4" IsReadOnly="True"/>
+                                    </Grid>
+                                </Border>
+
+                                <!-- Ligne 6 : Pompe 3 - Gasoil -->
+                                <Border Background="#0E2848" Padding="10,6" Margin="0,2">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="70"/>
+                                            <ColumnDefinition Width="80"/>
+                                            <ColumnDefinition Width="90"/>
+                                            <ColumnDefinition Width="110"/>
+                                            <ColumnDefinition Width="110"/>
+                                            <ColumnDefinition Width="90"/>
+                                            <ColumnDefinition Width="80"/>
+                                            <ColumnDefinition Width="110"/>
+                                        </Grid.ColumnDefinitions>
+                                        <ComboBox Grid.Column="0" x:Name="CbIlot6" Margin="0,0,5,0" Height="32"
+                                                  Background="#0F3460" Foreground="#FFC200"
+                                                  SelectionChanged="Ilot_Changed">
+                                            <ComboBoxItem Content="Îlot 1"/>
+                                            <ComboBoxItem Content="Îlot 2"/>
+                                            <ComboBoxItem Content="Îlot 3" IsSelected="True"/>
+                                        </ComboBox>
+                                        <ComboBox Grid.Column="1" x:Name="CbPompe6" Margin="0,0,5,0" Height="32"
+                                                  Background="#0F3460" Foreground="#8BAFD4">
+                                            <ComboBoxItem Content="P1"/>
+                                            <ComboBoxItem Content="P2"/>
+                                            <ComboBoxItem Content="P3" IsSelected="True"/>
+                                        </ComboBox>
+                                        <ComboBox Grid.Column="2" x:Name="CbCarb6" Margin="0,0,5,0" Height="32"
+                                                  Background="#0F3460" Foreground="#FFC200"
+                                                  SelectionChanged="Carburant_Changed">
+                                            <ComboBoxItem Content="Super"/>
+                                            <ComboBoxItem Content="Gasoil" IsSelected="True"/>
+                                        </ComboBox>
+                                        <TextBox Grid.Column="3" Margin="0,0,5,0" Height="32"
+                                                 Background="#1A2D50" Foreground="#8BAFD4"
+                                                 BorderBrush="#2A4060" BorderThickness="0,0,0,1"
+                                                 Padding="6,4" IsReadOnly="True" Text="0.00"/>
+                                        <TextBox Grid.Column="4" x:Name="TxtArr6" Margin="0,0,5,0" Height="32"
+                                                 Background="#0F3460" Foreground="White"
+                                                 BorderBrush="#FFC200" BorderThickness="0,0,0,2"
+                                                 Padding="6,4" TextChanged="IndexArrivee_Changed"/>
+                                        <TextBox Grid.Column="5" x:Name="TxtQte6" Margin="0,0,5,0" Height="32"
+                                                 Background="#1A2D50" Foreground="#00C896"
+                                                 BorderThickness="0" Padding="6,4" IsReadOnly="True"/>
+                                        <TextBox Grid.Column="6" x:Name="TxtPu6" Margin="0,0,5,0" Height="32"
+                                                 Background="#1A2D50" Foreground="#FFC200"
+                                                 BorderThickness="0" Padding="6,4"
+                                                 IsReadOnly="True" Text="680"/>
+                                        <TextBox Grid.Column="7" x:Name="TxtTotal6" Height="32"
+                                                 Background="#1A2D50" Foreground="White"
+                                                 BorderThickness="0" Padding="6,4" IsReadOnly="True"/>
+                                    </Grid>
+                                </Border>
+
+                                <!-- Ligne Total -->
+                                <Border Background="#0D1F3C" Padding="10,10" Margin="0,5,0,0">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="70"/>
+                                            <ColumnDefinition Width="80"/>
+                                            <ColumnDefinition Width="90"/>
+                                            <ColumnDefinition Width="110"/>
+                                            <ColumnDefinition Width="110"/>
+                                            <ColumnDefinition Width="90"/>
+                                            <ColumnDefinition Width="80"/>
+                                            <ColumnDefinition Width="110"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="4" Text="TOTAL GÉNÉRAL"
+                                                   FontSize="11" FontWeight="Bold"
+                                                   Foreground="White" VerticalAlignment="Center"/>
+                                        <TextBox Grid.Column="5" x:Name="TxtTotalQte"
+                                                 Background="#0D1F3C" Foreground="#00C896"
+                                                 BorderThickness="0" Padding="6,4"
+                                                 IsReadOnly="True" FontWeight="Bold" Height="32"/>
+                                        <TextBox Grid.Column="7" x:Name="TxtTotalMontant"
+                                                 Background="#0D1F3C" Foreground="#DD1F26"
+                                                 BorderThickness="0" Padding="6,4"
+                                                 IsReadOnly="True" FontWeight="Bold" Height="32"/>
+                                    </Grid>
+                                </Border>
+
+                            </StackPanel>
+                        </StackPanel>
                     </Border>
 
-                    <!-- Ligne Pompe 1 - Gasoil -->
-                    <Border Background="#0E2848" Padding="10,6" Margin="0,2">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="70"/>
-                                <ColumnDefinition Width="80"/>
-                                <ColumnDefinition Width="90"/>
-                                <ColumnDefinition Width="140"/>
-                                <ColumnDefinition Width="110"/>
-                                <ColumnDefinition Width="110"/>
-                                <ColumnDefinition Width="90"/>
-                                <ColumnDefinition Width="80"/>
-                                <ColumnDefinition Width="100"/>
-                            </Grid.ColumnDefinitions>
-                            <ComboBox Grid.Column="0" Margin="0,0,5,0" Height="32"
-                                      Background="#0F3460" Foreground="#FFC200">
-                                <ComboBoxItem Content="Îlot 1" IsSelected="True"/>
-                                <ComboBoxItem Content="Îlot 2"/>
-                                <ComboBoxItem Content="Îlot 3"/>
-                            </ComboBox>
-                            <ComboBox Grid.Column="1" Margin="0,0,5,0" Height="32"
-                                      Background="#0F3460" Foreground="#8BAFD4">
-                                <ComboBoxItem Content="P1" IsSelected="True"/>
-                                <ComboBoxItem Content="P2"/>
-                                <ComboBoxItem Content="P3"/>
-                            </ComboBox>
-                            <ComboBox Grid.Column="2" Margin="0,0,5,0" Height="32"
-                                      x:Name="CbCarb2"
-                                      Background="#0F3460" Foreground="#FFC200"
-                                      SelectionChanged="Carburant_Changed">
-                                <ComboBoxItem Content="Super"/>
-                                <ComboBoxItem Content="Gasoil" IsSelected="True"/>
-                            </ComboBox>
-                            <ComboBox Grid.Column="3" Margin="0,0,5,0" Height="32"
-                                      Background="#0F3460" Foreground="#E0EDFF">
-                                <ComboBoxItem Content="-- Pompiste --"/>
-                            </ComboBox>
-                            <TextBox Grid.Column="4" Margin="0,0,5,0" Height="32"
-                                     Background="#1A2D50" Foreground="#8BAFD4"
-                                     BorderBrush="#2A4060" BorderThickness="0,0,0,1"
-                                     Padding="6,4" IsReadOnly="True" Text="0.00"/>
-                            <TextBox Grid.Column="5" Margin="0,0,5,0" Height="32"
-                                     x:Name="TxtArr2"
-                                     Background="#0F3460" Foreground="White"
-                                     BorderBrush="#FFC200" BorderThickness="0,0,0,2"
-                                     Padding="6,4" TextChanged="IndexArrivee_Changed"/>
-                            <TextBox Grid.Column="6" Margin="0,0,5,0" Height="32"
-                                     Background="#1A2D50" Foreground="#00C896"
-                                     BorderThickness="0" Padding="6,4"
-                                     IsReadOnly="True" x:Name="TxtQte2"/>
-                            <TextBox Grid.Column="7" Margin="0,0,5,0" Height="32"
-                                     x:Name="TxtPu2"
-                                     Background="#1A2D50" Foreground="#FFC200"
-                                     BorderThickness="0" Padding="6,4"
-                                     IsReadOnly="True" Text="680"/>
-                            <TextBox Grid.Column="8" Height="32"
-                                     Background="#1A2D50" Foreground="White"
-                                     BorderThickness="0" Padding="6,4"
-                                     IsReadOnly="True" x:Name="TxtTotal2"/>
-                        </Grid>
+                    <!-- ══════════════════════════════════════════════ -->
+                    <!-- SECTION 3 — MOYENS DE PAIEMENT                -->
+                    <!-- ══════════════════════════════════════════════ -->
+                    <Border Background="#0A1628" Margin="0,0,0,12">
+                        <StackPanel>
+                            <Border Background="#0D1F3C" Padding="12,9">
+                                <TextBlock Text="3.  MOYENS DE PAIEMENT"
+                                           FontSize="11" FontWeight="Bold" Foreground="#FFC200"/>
+                            </Border>
+                            <Border Padding="15,14">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Grid.Column="0" Margin="0,0,12,0">
+                                        <TextBlock Text="TPE" FontSize="10" FontWeight="Bold"
+                                                   Foreground="#FFC200" Margin="0,0,0,5"/>
+                                        <TextBox x:Name="TxtTPE" Height="36"
+                                                 Background="#0F3460" Foreground="White"
+                                                 BorderBrush="#FFC200" BorderThickness="0,0,0,1"
+                                                 Padding="8,4" TextChanged="Paiement_Changed"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="1" Margin="0,0,12,0">
+                                        <TextBlock Text="WAVE" FontSize="10" FontWeight="Bold"
+                                                   Foreground="#FFC200" Margin="0,0,0,5"/>
+                                        <TextBox x:Name="TxtWAVE" Height="36"
+                                                 Background="#0F3460" Foreground="White"
+                                                 BorderBrush="#FFC200" BorderThickness="0,0,0,1"
+                                                 Padding="8,4" TextChanged="Paiement_Changed"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="2" Margin="0,0,12,0">
+                                        <TextBlock Text="ORANGE MONEY" FontSize="10" FontWeight="Bold"
+                                                   Foreground="#FFC200" Margin="0,0,0,5"/>
+                                        <TextBox x:Name="TxtOrangeMoney" Height="36"
+                                                 Background="#0F3460" Foreground="White"
+                                                 BorderBrush="#FFC200" BorderThickness="0,0,0,1"
+                                                 Padding="8,4" TextChanged="Paiement_Changed"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="3">
+                                        <TextBlock Text="CASH (calculé automatiquement)" FontSize="10"
+                                                   FontWeight="Bold" Foreground="#FFC200" Margin="0,0,0,5"/>
+                                        <TextBox x:Name="TxtCash" Height="36"
+                                                 Background="#1A2D50" Foreground="#00C896"
+                                                 BorderThickness="0" Padding="8,4"
+                                                 IsReadOnly="True" FontWeight="Bold"
+                                                 FontSize="13" Text="0"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
                     </Border>
 
-                    <!-- Ligne Pompe 2 - Super -->
-                    <Border Background="#0E2848" Padding="10,6" Margin="0,2">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="70"/>
-                                <ColumnDefinition Width="80"/>
-                                <ColumnDefinition Width="90"/>
-                                <ColumnDefinition Width="140"/>
-                                <ColumnDefinition Width="110"/>
-                                <ColumnDefinition Width="110"/>
-                                <ColumnDefinition Width="90"/>
-                                <ColumnDefinition Width="80"/>
-                                <ColumnDefinition Width="100"/>
-                            </Grid.ColumnDefinitions>
-                            <ComboBox Grid.Column="0" Margin="0,0,5,0" Height="32"
-                                      Background="#0F3460" Foreground="#FFC200">
-                                <ComboBoxItem Content="Îlot 1"/>
-                                <ComboBoxItem Content="Îlot 2" IsSelected="True"/>
-                                <ComboBoxItem Content="Îlot 3"/>
-                            </ComboBox>
-                            <ComboBox Grid.Column="1" Margin="0,0,5,0" Height="32"
-                                      Background="#0F3460" Foreground="#8BAFD4">
-                                <ComboBoxItem Content="P1"/>
-                                <ComboBoxItem Content="P2" IsSelected="True"/>
-                                <ComboBoxItem Content="P3"/>
-                            </ComboBox>
-                            <ComboBox Grid.Column="2" Margin="0,0,5,0" Height="32"
-                                      x:Name="CbCarb3"
-                                      Background="#0F3460" Foreground="#FFC200"
-                                      SelectionChanged="Carburant_Changed">
-                                <ComboBoxItem Content="Super" IsSelected="True"/>
-                                <ComboBoxItem Content="Gasoil"/>
-                            </ComboBox>
-                            <ComboBox Grid.Column="3" Margin="0,0,5,0" Height="32"
-                                      Background="#0F3460" Foreground="#E0EDFF">
-                                <ComboBoxItem Content="-- Pompiste --"/>
-                            </ComboBox>
-                            <TextBox Grid.Column="4" Margin="0,0,5,0" Height="32"
-                                     Background="#1A2D50" Foreground="#8BAFD4"
-                                     BorderBrush="#2A4060" BorderThickness="0,0,0,1"
-                                     Padding="6,4" IsReadOnly="True" Text="0.00"/>
-                            <TextBox Grid.Column="5" Margin="0,0,5,0" Height="32"
-                                     x:Name="TxtArr3"
-                                     Background="#0F3460" Foreground="White"
-                                     BorderBrush="#FFC200" BorderThickness="0,0,0,2"
-                                     Padding="6,4" TextChanged="IndexArrivee_Changed"/>
-                            <TextBox Grid.Column="6" Margin="0,0,5,0" Height="32"
-                                     Background="#1A2D50" Foreground="#00C896"
-                                     BorderThickness="0" Padding="6,4"
-                                     IsReadOnly="True" x:Name="TxtQte3"/>
-                            <TextBox Grid.Column="7" Margin="0,0,5,0" Height="32"
-                                     x:Name="TxtPu3"
-                                     Background="#1A2D50" Foreground="#FFC200"
-                                     BorderThickness="0" Padding="6,4"
-                                     IsReadOnly="True" Text="920"/>
-                            <TextBox Grid.Column="8" Height="32"
-                                     Background="#1A2D50" Foreground="White"
-                                     BorderThickness="0" Padding="6,4"
-                                     IsReadOnly="True" x:Name="TxtTotal3"/>
-                        </Grid>
+                    <!-- ══════════════════════════════════════════════ -->
+                    <!-- SECTION 4 — PRÉLÈVEMENTS                      -->
+                    <!-- ══════════════════════════════════════════════ -->
+                    <Border Background="#0A1628" Margin="0,0,0,12">
+                        <StackPanel>
+                            <Border Background="#0D1F3C" Padding="12,9">
+                                <TextBlock Text="4.  PRÉLÈVEMENTS"
+                                           FontSize="11" FontWeight="Bold" Foreground="#FFC200"/>
+                            </Border>
+                            <Border Padding="15,12">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- 4A : Charges / Dépenses du jour -->
+                                    <Border Grid.Column="0" Margin="0,0,8,0"
+                                            Background="#0D1F3C" Padding="12">
+                                        <StackPanel>
+                                            <TextBlock Text="A. CHARGES — DÉPENSES DU JOUR"
+                                                       FontSize="10" FontWeight="Bold"
+                                                       Foreground="#FFC200" Margin="0,0,0,10"/>
+
+                                            <TextBlock Text="Désignation (liste) :" FontSize="10"
+                                                       Foreground="#7898B0" Margin="0,0,0,4"/>
+                                            <ComboBox x:Name="CbDepensesCourantes" Height="32" Margin="0,0,0,6">
+                                                <ComboBoxItem Content="-- Sélectionner --" IsSelected="True"/>
+                                            </ComboBox>
+
+                                            <TextBlock Text="Ou nouvelle désignation :" FontSize="10"
+                                                       Foreground="#7898B0" Margin="0,0,0,4"/>
+                                            <TextBox x:Name="TxtNouveauLibelle" Height="32" Margin="0,0,0,6"
+                                                     Background="#0F3460" Foreground="White"
+                                                     BorderBrush="#FFC200" BorderThickness="0,0,0,1"
+                                                     Padding="6,4"/>
+
+                                            <Grid Margin="0,0,0,6">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="76"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBox Grid.Column="0" x:Name="TxtMontantDepense"
+                                                         Height="32" Margin="0,0,6,0"
+                                                         Background="#0F3460" Foreground="White"
+                                                         BorderBrush="#FFC200" BorderThickness="0,0,0,1"
+                                                         Padding="6,4"/>
+                                                <Border Grid.Column="1" Background="#DD1F26"
+                                                        Padding="6,6" Cursor="Hand"
+                                                        MouseLeftButtonDown="BtnAjouterDepense_Click">
+                                                    <TextBlock Text="+ Ajouter" FontSize="10"
+                                                               FontWeight="Bold" Foreground="White"
+                                                               HorizontalAlignment="Center"/>
+                                                </Border>
+                                            </Grid>
+
+                                            <Rectangle Height="1" Fill="#1A2D50" Margin="0,2,0,6"/>
+                                            <StackPanel x:Name="ListeDepensesJour"/>
+                                            <Rectangle Height="1" Fill="#1A2D50" Margin="0,6,0,4"/>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                                <TextBlock Text="TOTAL : " FontSize="10"
+                                                           FontWeight="Bold" Foreground="#888888"/>
+                                                <TextBlock x:Name="TxtTotalDepensesJour" Text="0 FCFA"
+                                                           FontSize="10" FontWeight="Bold"
+                                                           Foreground="#DD1F26"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Border>
+
+                                    <!-- 4B : Charges / Bons -->
+                                    <Border Grid.Column="1" Margin="0,0,8,0"
+                                            Background="#0D1F3C" Padding="12">
+                                        <StackPanel>
+                                            <TextBlock Text="B. CHARGES — BONS"
+                                                       FontSize="10" FontWeight="Bold"
+                                                       Foreground="#FFC200" Margin="0,0,0,10"/>
+
+                                            <TextBlock Text="Bénéficiaire :" FontSize="10"
+                                                       Foreground="#7898B0" Margin="0,0,0,4"/>
+                                            <ComboBox x:Name="CbBeneficiaireBon" Height="32" Margin="0,0,0,6">
+                                                <ComboBoxItem Content="-- Choisir --" IsSelected="True"/>
+                                                <ComboBoxItem Content="Personnel 1"/>
+                                                <ComboBoxItem Content="Personnel 2"/>
+                                                <ComboBoxItem Content="Client divers"/>
+                                            </ComboBox>
+
+                                            <TextBlock Text="Type de bon :" FontSize="10"
+                                                       Foreground="#7898B0" Margin="0,0,0,4"/>
+                                            <ComboBox x:Name="CbTypeBon" Height="32" Margin="0,0,0,6">
+                                                <ComboBoxItem Content="Prêt personnel" IsSelected="True"/>
+                                                <ComboBoxItem Content="Bon carburant"/>
+                                            </ComboBox>
+
+                                            <Grid Margin="0,0,0,6">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="76"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBox Grid.Column="0" x:Name="TxtMontantBon"
+                                                         Height="32" Margin="0,0,6,0"
+                                                         Background="#0F3460" Foreground="White"
+                                                         BorderBrush="#FFC200" BorderThickness="0,0,0,1"
+                                                         Padding="6,4"/>
+                                                <Border Grid.Column="1" Background="#DD1F26"
+                                                        Padding="6,6" Cursor="Hand"
+                                                        MouseLeftButtonDown="BtnAjouterBon_Click">
+                                                    <TextBlock Text="+ Ajouter" FontSize="10"
+                                                               FontWeight="Bold" Foreground="White"
+                                                               HorizontalAlignment="Center"/>
+                                                </Border>
+                                            </Grid>
+
+                                            <Rectangle Height="1" Fill="#1A2D50" Margin="0,2,0,6"/>
+                                            <StackPanel x:Name="ListeBons"/>
+                                            <Rectangle Height="1" Fill="#1A2D50" Margin="0,6,0,4"/>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                                <TextBlock Text="TOTAL : " FontSize="10"
+                                                           FontWeight="Bold" Foreground="#888888"/>
+                                                <TextBlock x:Name="TxtTotalBons" Text="0 FCFA"
+                                                           FontSize="10" FontWeight="Bold"
+                                                           Foreground="#DD1F26"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Border>
+
+                                    <!-- 4C : Décharges -->
+                                    <Border Grid.Column="2" Background="#0D1F3C" Padding="12">
+                                        <StackPanel>
+                                            <TextBlock Text="C. DÉCHARGES"
+                                                       FontSize="10" FontWeight="Bold"
+                                                       Foreground="#FFC200" Margin="0,0,0,10"/>
+
+                                            <TextBlock Text="Montant (FCFA) :" FontSize="10"
+                                                       Foreground="#7898B0" Margin="0,0,0,4"/>
+                                            <TextBox x:Name="TxtMontantDecharge" Height="32" Margin="0,0,0,6"
+                                                     Background="#0F3460" Foreground="White"
+                                                     BorderBrush="#FFC200" BorderThickness="0,0,0,1"
+                                                     Padding="6,4"/>
+
+                                            <TextBlock Text="Motif :" FontSize="10"
+                                                       Foreground="#7898B0" Margin="0,0,0,4"/>
+                                            <TextBox x:Name="TxtMotifDecharge" Height="32" Margin="0,0,0,8"
+                                                     Background="#0F3460" Foreground="White"
+                                                     BorderBrush="#FFC200" BorderThickness="0,0,0,1"
+                                                     Padding="6,4"/>
+
+                                            <Border Background="#DD1F26" Padding="8,6"
+                                                    Cursor="Hand" Margin="0,0,0,6"
+                                                    MouseLeftButtonDown="BtnAjouterDecharge_Click">
+                                                <TextBlock Text="+ Ajouter" FontSize="10"
+                                                           FontWeight="Bold" Foreground="White"
+                                                           HorizontalAlignment="Center"/>
+                                            </Border>
+
+                                            <Rectangle Height="1" Fill="#1A2D50" Margin="0,2,0,6"/>
+                                            <StackPanel x:Name="ListeDechargesIndex"/>
+                                            <Rectangle Height="1" Fill="#1A2D50" Margin="0,6,0,4"/>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                                <TextBlock Text="TOTAL : " FontSize="10"
+                                                           FontWeight="Bold" Foreground="#888888"/>
+                                                <TextBlock x:Name="TxtTotalDechargesIndex" Text="0 FCFA"
+                                                           FontSize="10" FontWeight="Bold"
+                                                           Foreground="#DD1F26"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Border>
+
+                                </Grid>
+                            </Border>
+                        </StackPanel>
                     </Border>
 
-                    <!-- Ligne Pompe 2 - Gasoil -->
-                    <Border Background="#0E2848" Padding="10,6" Margin="0,2">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="70"/>
-                                <ColumnDefinition Width="80"/>
-                                <ColumnDefinition Width="90"/>
-                                <ColumnDefinition Width="140"/>
-                                <ColumnDefinition Width="110"/>
-                                <ColumnDefinition Width="110"/>
-                                <ColumnDefinition Width="90"/>
-                                <ColumnDefinition Width="80"/>
-                                <ColumnDefinition Width="100"/>
-                            </Grid.ColumnDefinitions>
-                            <ComboBox Grid.Column="0" Margin="0,0,5,0" Height="32"
-                                      Background="#0F3460" Foreground="#FFC200">
-                                <ComboBoxItem Content="Îlot 1"/>
-                                <ComboBoxItem Content="Îlot 2" IsSelected="True"/>
-                                <ComboBoxItem Content="Îlot 3"/>
-                            </ComboBox>
-                            <ComboBox Grid.Column="1" Margin="0,0,5,0" Height="32"
-                                      Background="#0F3460" Foreground="#8BAFD4">
-                                <ComboBoxItem Content="P1"/>
-                                <ComboBoxItem Content="P2" IsSelected="True"/>
-                                <ComboBoxItem Content="P3"/>
-                            </ComboBox>
-                            <ComboBox Grid.Column="2" Margin="0,0,5,0" Height="32"
-                                      x:Name="CbCarb4"
-                                      Background="#0F3460" Foreground="#FFC200"
-                                      SelectionChanged="Carburant_Changed">
-                                <ComboBoxItem Content="Super"/>
-                                <ComboBoxItem Content="Gasoil" IsSelected="True"/>
-                            </ComboBox>
-                            <ComboBox Grid.Column="3" Margin="0,0,5,0" Height="32"
-                                      Background="#0F3460" Foreground="#E0EDFF">
-                                <ComboBoxItem Content="-- Pompiste --"/>
-                            </ComboBox>
-                            <TextBox Grid.Column="4" Margin="0,0,5,0" Height="32"
-                                     Background="#1A2D50" Foreground="#8BAFD4"
-                                     BorderBrush="#2A4060" BorderThickness="0,0,0,1"
-                                     Padding="6,4" IsReadOnly="True" Text="0.00"/>
-                            <TextBox Grid.Column="5" Margin="0,0,5,0" Height="32"
-                                     x:Name="TxtArr4"
-                                     Background="#0F3460" Foreground="White"
-                                     BorderBrush="#FFC200" BorderThickness="0,0,0,2"
-                                     Padding="6,4" TextChanged="IndexArrivee_Changed"/>
-                            <TextBox Grid.Column="6" Margin="0,0,5,0" Height="32"
-                                     Background="#1A2D50" Foreground="#00C896"
-                                     BorderThickness="0" Padding="6,4"
-                                     IsReadOnly="True" x:Name="TxtQte4"/>
-                            <TextBox Grid.Column="7" Margin="0,0,5,0" Height="32"
-                                     x:Name="TxtPu4"
-                                     Background="#1A2D50" Foreground="#FFC200"
-                                     BorderThickness="0" Padding="6,4"
-                                     IsReadOnly="True" Text="680"/>
-                            <TextBox Grid.Column="8" Height="32"
-                                     Background="#1A2D50" Foreground="White"
-                                     BorderThickness="0" Padding="6,4"
-                                     IsReadOnly="True" x:Name="TxtTotal4"/>
-                        </Grid>
+                    <!-- ══════════════════════════════════════════════ -->
+                    <!-- SECTION 5 — RÉSUMÉ CAISSE CARBURANT           -->
+                    <!-- ══════════════════════════════════════════════ -->
+                    <Border Background="#0A1628" Margin="0,0,0,12">
+                        <StackPanel>
+                            <Border Background="#0D1F3C" Padding="12,9">
+                                <TextBlock Text="5.  RÉSUMÉ CAISSE CARBURANT"
+                                           FontSize="11" FontWeight="Bold" Foreground="#FFC200"/>
+                            </Border>
+                            <Border Padding="15,15">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="220"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Récapitulatif -->
+                                    <Border Grid.Column="0" Margin="0,0,20,0"
+                                            Background="#0D1F3C" Padding="18">
+                                        <StackPanel>
+
+                                            <!-- Total carburant -->
+                                            <Grid Margin="0,0,0,8">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="260"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="Montant total carburant :"
+                                                           FontSize="12" FontWeight="Bold" Foreground="White"
+                                                           VerticalAlignment="Center"/>
+                                                <TextBlock Grid.Column="1" x:Name="TxtResumeTotalCarb"
+                                                           Text="0 FCFA" FontSize="13" FontWeight="Bold"
+                                                           Foreground="White"/>
+                                            </Grid>
+
+                                            <Rectangle Height="1" Fill="#1A2D50" Margin="0,2,0,8"/>
+
+                                            <!-- TPE -->
+                                            <Grid Margin="0,0,0,5">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="260"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="— TPE :" FontSize="11" Foreground="#888888"/>
+                                                <TextBlock Grid.Column="1" x:Name="TxtResumeTPE"
+                                                           Text="0 FCFA" FontSize="11" Foreground="White"/>
+                                            </Grid>
+
+                                            <!-- WAVE -->
+                                            <Grid Margin="0,0,0,5">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="260"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="— WAVE :" FontSize="11" Foreground="#888888"/>
+                                                <TextBlock Grid.Column="1" x:Name="TxtResumeWAVE"
+                                                           Text="0 FCFA" FontSize="11" Foreground="White"/>
+                                            </Grid>
+
+                                            <!-- ORANGE MONEY -->
+                                            <Grid Margin="0,0,0,5">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="260"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="— ORANGE MONEY :" FontSize="11" Foreground="#888888"/>
+                                                <TextBlock Grid.Column="1" x:Name="TxtResumeOrange"
+                                                           Text="0 FCFA" FontSize="11" Foreground="White"/>
+                                            </Grid>
+
+                                            <Rectangle Height="1" Fill="#1A2D50" Margin="0,5,0,8"/>
+
+                                            <!-- CASH -->
+                                            <Grid Margin="0,0,0,12">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="260"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="Total CASH :" FontSize="12"
+                                                           FontWeight="Bold" Foreground="White"
+                                                           VerticalAlignment="Center"/>
+                                                <TextBlock Grid.Column="1" x:Name="TxtResumeCash"
+                                                           Text="0 FCFA" FontSize="13" FontWeight="Bold"
+                                                           Foreground="#00C896"/>
+                                            </Grid>
+
+                                            <Rectangle Height="2" Fill="#FFC200" Margin="0,0,0,12"/>
+
+                                            <!-- Total versé -->
+                                            <Grid Margin="0,0,0,10">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="260"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="Total versé par l'agent (FCFA) :"
+                                                           FontSize="12" FontWeight="Bold" Foreground="White"
+                                                           VerticalAlignment="Center"/>
+                                                <TextBox Grid.Column="1" x:Name="TxtVersePompiste"
+                                                         Height="36" Width="160" HorizontalAlignment="Left"
+                                                         Background="#0F3460" Foreground="White"
+                                                         BorderBrush="#FFC200" BorderThickness="0,0,0,2"
+                                                         Padding="8,4" FontSize="13"
+                                                         TextChanged="TxtVerse_Changed"/>
+                                            </Grid>
+
+                                            <!-- Écart -->
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="260"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="ÉCART (négatif = manquant) :"
+                                                           FontSize="12" FontWeight="Bold" Foreground="White"
+                                                           VerticalAlignment="Center"/>
+                                                <TextBlock Grid.Column="1" x:Name="TxtEcartCaisse"
+                                                           Text="0 FCFA" FontSize="15" FontWeight="Black"
+                                                           Foreground="#00C896"/>
+                                            </Grid>
+
+                                        </StackPanel>
+                                    </Border>
+
+                                    <!-- Boutons -->
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center"
+                                                HorizontalAlignment="Center">
+                                        <Border Background="#0F3460" Padding="16,12"
+                                                Margin="0,0,0,10" Cursor="Hand"
+                                                MouseLeftButtonDown="BtnEnregistrerManquant_Click">
+                                            <StackPanel>
+                                                <TextBlock Text="⚠" FontSize="22" Foreground="#FFC200"
+                                                           HorizontalAlignment="Center"/>
+                                                <TextBlock Text="ENREGISTRER" FontSize="11"
+                                                           FontWeight="Bold" Foreground="White"
+                                                           HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                                                <TextBlock Text="LE MANQUANT" FontSize="11"
+                                                           FontWeight="Bold" Foreground="White"
+                                                           HorizontalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Border>
+                                        <Border Background="#0F3460" Padding="16,12"
+                                                Margin="0,0,0,10" Cursor="Hand"
+                                                MouseLeftButtonDown="BtnSauvegarder_Click">
+                                            <TextBlock Text="💾  SAUVEGARDER" FontSize="12"
+                                                       FontWeight="Bold" Foreground="White"
+                                                       HorizontalAlignment="Center"/>
+                                        </Border>
+                                        <Border Background="#DD1F26" Padding="16,12"
+                                                Cursor="Hand" MouseLeftButtonDown="BtnValider_Click">
+                                            <TextBlock Text="✅  VALIDER" FontSize="12"
+                                                       FontWeight="Bold" Foreground="White"
+                                                       HorizontalAlignment="Center"/>
+                                        </Border>
+                                    </StackPanel>
+
+                                </Grid>
+                            </Border>
+                        </StackPanel>
                     </Border>
 
-                    <!-- Ligne Pompe 3 - Super -->
-                    <Border Background="#0E2848" Padding="10,6" Margin="0,2">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="70"/>
-                                <ColumnDefinition Width="80"/>
-                                <ColumnDefinition Width="90"/>
-                                <ColumnDefinition Width="140"/>
-                                <ColumnDefinition Width="110"/>
-                                <ColumnDefinition Width="110"/>
-                                <ColumnDefinition Width="90"/>
-                                <ColumnDefinition Width="80"/>
-                                <ColumnDefinition Width="100"/>
-                            </Grid.ColumnDefinitions>
-                            <ComboBox Grid.Column="0" Margin="0,0,5,0" Height="32"
-                                      Background="#0F3460" Foreground="#FFC200">
-                                <ComboBoxItem Content="Îlot 1"/>
-                                <ComboBoxItem Content="Îlot 2"/>
-                                <ComboBoxItem Content="Îlot 3" IsSelected="True"/>
-                            </ComboBox>
-                            <ComboBox Grid.Column="1" Margin="0,0,5,0" Height="32"
-                                      Background="#0F3460" Foreground="#8BAFD4">
-                                <ComboBoxItem Content="P1"/>
-                                <ComboBoxItem Content="P2"/>
-                                <ComboBoxItem Content="P3" IsSelected="True"/>
-                            </ComboBox>
-                            <ComboBox Grid.Column="2" Margin="0,0,5,0" Height="32"
-                                      x:Name="CbCarb5"
-                                      Background="#0F3460" Foreground="#FFC200"
-                                      SelectionChanged="Carburant_Changed">
-                                <ComboBoxItem Content="Super" IsSelected="True"/>
-                                <ComboBoxItem Content="Gasoil"/>
-                            </ComboBox>
-                            <ComboBox Grid.Column="3" Margin="0,0,5,0" Height="32"
-                                      Background="#0F3460" Foreground="#E0EDFF">
-                                <ComboBoxItem Content="-- Pompiste --"/>
-                            </ComboBox>
-                            <TextBox Grid.Column="4" Margin="0,0,5,0" Height="32"
-                                     Background="#1A2D50" Foreground="#8BAFD4"
-                                     BorderBrush="#2A4060" BorderThickness="0,0,0,1"
-                                     Padding="6,4" IsReadOnly="True" Text="0.00"/>
-                            <TextBox Grid.Column="5" Margin="0,0,5,0" Height="32"
-                                     x:Name="TxtArr5"
-                                     Background="#0F3460" Foreground="White"
-                                     BorderBrush="#FFC200" BorderThickness="0,0,0,2"
-                                     Padding="6,4" TextChanged="IndexArrivee_Changed"/>
-                            <TextBox Grid.Column="6" Margin="0,0,5,0" Height="32"
-                                     Background="#1A2D50" Foreground="#00C896"
-                                     BorderThickness="0" Padding="6,4"
-                                     IsReadOnly="True" x:Name="TxtQte5"/>
-                            <TextBox Grid.Column="7" Margin="0,0,5,0" Height="32"
-                                     x:Name="TxtPu5"
-                                     Background="#1A2D50" Foreground="#FFC200"
-                                     BorderThickness="0" Padding="6,4"
-                                     IsReadOnly="True" Text="920"/>
-                            <TextBox Grid.Column="8" Height="32"
-                                     Background="#1A2D50" Foreground="White"
-                                     BorderThickness="0" Padding="6,4"
-                                     IsReadOnly="True" x:Name="TxtTotal5"/>
-                        </Grid>
-                    </Border>
-
-                    <!-- Ligne Pompe 3 - Gasoil -->
-                    <Border Background="#0E2848" Padding="10,6" Margin="0,2">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="70"/>
-                                <ColumnDefinition Width="80"/>
-                                <ColumnDefinition Width="90"/>
-                                <ColumnDefinition Width="140"/>
-                                <ColumnDefinition Width="110"/>
-                                <ColumnDefinition Width="110"/>
-                                <ColumnDefinition Width="90"/>
-                                <ColumnDefinition Width="80"/>
-                                <ColumnDefinition Width="100"/>
-                            </Grid.ColumnDefinitions>
-                            <ComboBox Grid.Column="0" Margin="0,0,5,0" Height="32"
-                                      Background="#0F3460" Foreground="#FFC200">
-                                <ComboBoxItem Content="Îlot 1"/>
-                                <ComboBoxItem Content="Îlot 2"/>
-                                <ComboBoxItem Content="Îlot 3" IsSelected="True"/>
-                            </ComboBox>
-                            <ComboBox Grid.Column="1" Margin="0,0,5,0" Height="32"
-                                      Background="#0F3460" Foreground="#8BAFD4">
-                                <ComboBoxItem Content="P1"/>
-                                <ComboBoxItem Content="P2"/>
-                                <ComboBoxItem Content="P3" IsSelected="True"/>
-                            </ComboBox>
-                            <ComboBox Grid.Column="2" Margin="0,0,5,0" Height="32"
-                                      x:Name="CbCarb6"
-                                      Background="#0F3460" Foreground="#FFC200"
-                                      SelectionChanged="Carburant_Changed">
-                                <ComboBoxItem Content="Super"/>
-                                <ComboBoxItem Content="Gasoil" IsSelected="True"/>
-                            </ComboBox>
-                            <ComboBox Grid.Column="3" Margin="0,0,5,0" Height="32"
-                                      Background="#0F3460" Foreground="#E0EDFF">
-                                <ComboBoxItem Content="-- Pompiste --"/>
-                            </ComboBox>
-                            <TextBox Grid.Column="4" Margin="0,0,5,0" Height="32"
-                                     Background="#1A2D50" Foreground="#8BAFD4"
-                                     BorderBrush="#2A4060" BorderThickness="0,0,0,1"
-                                     Padding="6,4" IsReadOnly="True" Text="0.00"/>
-                            <TextBox Grid.Column="5" Margin="0,0,5,0" Height="32"
-                                     x:Name="TxtArr6"
-                                     Background="#0F3460" Foreground="White"
-                                     BorderBrush="#FFC200" BorderThickness="0,0,0,2"
-                                     Padding="6,4" TextChanged="IndexArrivee_Changed"/>
-                            <TextBox Grid.Column="6" Margin="0,0,5,0" Height="32"
-                                     Background="#1A2D50" Foreground="#00C896"
-                                     BorderThickness="0" Padding="6,4"
-                                     IsReadOnly="True" x:Name="TxtQte6"/>
-                            <TextBox Grid.Column="7" Margin="0,0,5,0" Height="32"
-                                     x:Name="TxtPu6"
-                                     Background="#1A2D50" Foreground="#FFC200"
-                                     BorderThickness="0" Padding="6,4"
-                                     IsReadOnly="True" Text="680"/>
-                            <TextBox Grid.Column="8" Height="32"
-                                     Background="#1A2D50" Foreground="White"
-                                     BorderThickness="0" Padding="6,4"
-                                     IsReadOnly="True" x:Name="TxtTotal6"/>
-                        </Grid>
-                    </Border>
-
-                    <!-- Ligne Total -->
-                    <Border Background="#0D1F3C" Padding="10,10" Margin="0,5,0,0">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="70"/>
-                                <ColumnDefinition Width="80"/>
-                                <ColumnDefinition Width="90"/>
-                                <ColumnDefinition Width="140"/>
-                                <ColumnDefinition Width="110"/>
-                                <ColumnDefinition Width="110"/>
-                                <ColumnDefinition Width="90"/>
-                                <ColumnDefinition Width="80"/>
-                                <ColumnDefinition Width="100"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="5" Text="TOTAL GÉNÉRAL"
-                                       FontSize="11" FontWeight="Bold"
-                                       Foreground="White" VerticalAlignment="Center"/>
-                            <TextBox Grid.Column="6" x:Name="TxtTotalQte"
-                                     Background="#0D1F3C" Foreground="#00C896"
-                                     BorderThickness="0" Padding="6,4"
-                                     IsReadOnly="True" FontWeight="Bold" Height="32"/>
-                            <TextBox Grid.Column="8" x:Name="TxtTotalMontant"
-                                     Background="#0D1F3C" Foreground="#DD1F26"
-                                     BorderThickness="0" Padding="6,4"
-                                     IsReadOnly="True" FontWeight="Bold" Height="32"/>
-                        </Grid>
-                    </Border>
-
-                    <!-- Boutons actions -->
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
-                                Margin="0,15,0,0">
-                        <Border Background="#0F3460" Padding="20,12"
-                                Margin="0,0,10,0" Cursor="Hand"
-                                MouseLeftButtonDown="BtnSauvegarder_Click">
-                            <TextBlock Text="💾  SAUVEGARDER" FontSize="12"
-                                       FontWeight="Bold" Foreground="White"/>
-                        </Border>
-                        <Border Background="#DD1F26" Padding="20,12"
-                                Cursor="Hand"
-                                MouseLeftButtonDown="BtnValider_Click">
-                            <TextBlock Text="✅  VALIDER" FontSize="12"
-                                       FontWeight="Bold" Foreground="White"/>
-                        </Border>
-                    </StackPanel>
-
-                    <!-- Message statut -->
+                    <!-- Statut -->
                     <TextBlock x:Name="TxtStatut" FontSize="12"
                                Foreground="#00C896" HorizontalAlignment="Right"
-                               Margin="0,10,0,0" Visibility="Collapsed"/>
+                               Margin="0,5,0,20" Visibility="Collapsed"/>
+
                 </StackPanel>
             </ScrollViewer>
 
@@ -677,16 +1074,10 @@
             <ScrollViewer x:Name="PanelCaisses" Grid.Row="1"
                         VerticalScrollBarVisibility="Auto" Visibility="Collapsed">
                 <StackPanel Margin="20">
-
-                    <!-- TITRE + DATE -->
                     <TextBlock Text="Caisse du jour" FontSize="15" FontWeight="Bold"
                             Foreground="#8BAFD4" Margin="0,0,0,20"/>
-
-                    <!-- CAISSE PAR POMPISTE -->
                     <TextBlock Text="PAR POMPISTE" FontSize="11" FontWeight="Bold"
                             Foreground="#FFC200" Margin="0,0,0,10"/>
-
-                    <!-- En-tête tableau pompistes -->
                     <Border Background="#0D1F3C" Padding="10,8" Margin="0,0,0,3">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -699,26 +1090,16 @@
                                 <ColumnDefinition Width="130"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="POMPISTE" FontSize="10"
-                                    FontWeight="Bold" Foreground="#FFC200"/>
-                            <TextBlock Grid.Column="1" Text="POMPE" FontSize="10"
-                                    FontWeight="Bold" Foreground="#FFC200"/>
-                            <TextBlock Grid.Column="2" Text="SUPER (L)" FontSize="10"
-                                    FontWeight="Bold" Foreground="#FFC200"/>
-                            <TextBlock Grid.Column="3" Text="GASOIL (L)" FontSize="10"
-                                    FontWeight="Bold" Foreground="#FFC200"/>
-                            <TextBlock Grid.Column="4" Text="VENTES BRUTES" FontSize="10"
-                                    FontWeight="Bold" Foreground="#FFC200"/>
-                            <TextBlock Grid.Column="5" Text="DÉCHARGES" FontSize="10"
-                                    FontWeight="Bold" Foreground="#FFC200"/>
-                            <TextBlock Grid.Column="6" Text="NET À REMETTRE" FontSize="10"
-                                    FontWeight="Bold" Foreground="#FFC200"/>
-                            <TextBlock Grid.Column="7" Text="STATUT" FontSize="10"
-                                    FontWeight="Bold" Foreground="#FFC200"/>
+                            <TextBlock Grid.Column="0" Text="POMPISTE" FontSize="10" FontWeight="Bold" Foreground="#FFC200"/>
+                            <TextBlock Grid.Column="1" Text="POMPE" FontSize="10" FontWeight="Bold" Foreground="#FFC200"/>
+                            <TextBlock Grid.Column="2" Text="SUPER (L)" FontSize="10" FontWeight="Bold" Foreground="#FFC200"/>
+                            <TextBlock Grid.Column="3" Text="GASOIL (L)" FontSize="10" FontWeight="Bold" Foreground="#FFC200"/>
+                            <TextBlock Grid.Column="4" Text="VENTES BRUTES" FontSize="10" FontWeight="Bold" Foreground="#FFC200"/>
+                            <TextBlock Grid.Column="5" Text="DÉCHARGES" FontSize="10" FontWeight="Bold" Foreground="#FFC200"/>
+                            <TextBlock Grid.Column="6" Text="NET À REMETTRE" FontSize="10" FontWeight="Bold" Foreground="#FFC200"/>
+                            <TextBlock Grid.Column="7" Text="STATUT" FontSize="10" FontWeight="Bold" Foreground="#FFC200"/>
                         </Grid>
                     </Border>
-
-                    <!-- Ligne pompiste 1 -->
                     <Border Background="#0A1628" Padding="10,8" Margin="0,2">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -731,41 +1112,23 @@
                                 <ColumnDefinition Width="130"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="-- Non affecté --"
-                                    Foreground="#7898B0" FontSize="12" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="1" Text="P1" Foreground="White"
-                                    FontSize="12" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="2" x:Name="TxtCaisseP1Super"
-                                    Text="0.00 L" Foreground="#00C896"
-                                    FontSize="12" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="3" x:Name="TxtCaisseP1Gasoil"
-                                    Text="0.00 L" Foreground="#00C896"
-                                    FontSize="12" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="4" x:Name="TxtCaisseP1Brut"
-                                    Text="0 FCFA" Foreground="White"
-                                    FontSize="12" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="0" Text="-- Non affecté --" Foreground="#7898B0" FontSize="12" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="P1" Foreground="White" FontSize="12" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="2" x:Name="TxtCaisseP1Super" Text="0.00 L" Foreground="#00C896" FontSize="12" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="3" x:Name="TxtCaisseP1Gasoil" Text="0.00 L" Foreground="#00C896" FontSize="12" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="4" x:Name="TxtCaisseP1Brut" Text="0 FCFA" Foreground="White" FontSize="12" VerticalAlignment="Center"/>
                             <StackPanel Grid.Column="5" Orientation="Horizontal">
-                                <TextBlock x:Name="TxtCaisseP1Decharge"
-                                        Text="0 FCFA" Foreground="#DD1F26"
-                                        FontSize="12" VerticalAlignment="Center"/>
-                                <Border Background="#0F3460" Padding="6,3" Margin="8,0,0,0"
-                                        Cursor="Hand" MouseLeftButtonDown="BtnDecharge_Click"
-                                        Tag="P1">
+                                <TextBlock x:Name="TxtCaisseP1Decharge" Text="0 FCFA" Foreground="#DD1F26" FontSize="12" VerticalAlignment="Center"/>
+                                <Border Background="#0F3460" Padding="6,3" Margin="8,0,0,0" Cursor="Hand" MouseLeftButtonDown="BtnDecharge_Click" Tag="P1">
                                     <TextBlock Text="+ Ajouter" FontSize="10" Foreground="#FFC200"/>
                                 </Border>
                             </StackPanel>
-                            <TextBlock Grid.Column="6" x:Name="TxtCaisseP1Net"
-                                    Text="0 FCFA" Foreground="White" FontWeight="Bold"
-                                    FontSize="12" VerticalAlignment="Center"/>
-                            <Border Grid.Column="7" Background="#0F3460" Padding="8,4"
-                                    HorizontalAlignment="Left" Cursor="Hand">
-                                <TextBlock Text="EN ATTENTE" FontSize="10"
-                                        Foreground="#FFC200" FontWeight="Bold"/>
+                            <TextBlock Grid.Column="6" x:Name="TxtCaisseP1Net" Text="0 FCFA" Foreground="White" FontWeight="Bold" FontSize="12" VerticalAlignment="Center"/>
+                            <Border Grid.Column="7" Background="#0F3460" Padding="8,4" HorizontalAlignment="Left" Cursor="Hand">
+                                <TextBlock Text="EN ATTENTE" FontSize="10" Foreground="#FFC200" FontWeight="Bold"/>
                             </Border>
                         </Grid>
                     </Border>
-
-                    <!-- Ligne pompiste 2 -->
                     <Border Background="#0A1628" Padding="10,8" Margin="0,2">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -778,41 +1141,23 @@
                                 <ColumnDefinition Width="130"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="-- Non affecté --"
-                                    Foreground="#7898B0" FontSize="12" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="1" Text="P2" Foreground="White"
-                                    FontSize="12" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="2" x:Name="TxtCaisseP2Super"
-                                    Text="0.00 L" Foreground="#00C896"
-                                    FontSize="12" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="3" x:Name="TxtCaisseP2Gasoil"
-                                    Text="0.00 L" Foreground="#00C896"
-                                    FontSize="12" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="4" x:Name="TxtCaisseP2Brut"
-                                    Text="0 FCFA" Foreground="White"
-                                    FontSize="12" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="0" Text="-- Non affecté --" Foreground="#7898B0" FontSize="12" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="P2" Foreground="White" FontSize="12" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="2" x:Name="TxtCaisseP2Super" Text="0.00 L" Foreground="#00C896" FontSize="12" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="3" x:Name="TxtCaisseP2Gasoil" Text="0.00 L" Foreground="#00C896" FontSize="12" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="4" x:Name="TxtCaisseP2Brut" Text="0 FCFA" Foreground="White" FontSize="12" VerticalAlignment="Center"/>
                             <StackPanel Grid.Column="5" Orientation="Horizontal">
-                                <TextBlock x:Name="TxtCaisseP2Decharge"
-                                        Text="0 FCFA" Foreground="#DD1F26"
-                                        FontSize="12" VerticalAlignment="Center"/>
-                                <Border Background="#0F3460" Padding="6,3" Margin="8,0,0,0"
-                                        Cursor="Hand" MouseLeftButtonDown="BtnDecharge_Click"
-                                        Tag="P2">
+                                <TextBlock x:Name="TxtCaisseP2Decharge" Text="0 FCFA" Foreground="#DD1F26" FontSize="12" VerticalAlignment="Center"/>
+                                <Border Background="#0F3460" Padding="6,3" Margin="8,0,0,0" Cursor="Hand" MouseLeftButtonDown="BtnDecharge_Click" Tag="P2">
                                     <TextBlock Text="+ Ajouter" FontSize="10" Foreground="#FFC200"/>
                                 </Border>
                             </StackPanel>
-                            <TextBlock Grid.Column="6" x:Name="TxtCaisseP2Net"
-                                    Text="0 FCFA" Foreground="White" FontWeight="Bold"
-                                    FontSize="12" VerticalAlignment="Center"/>
-                            <Border Grid.Column="7" Background="#0F3460" Padding="8,4"
-                                    HorizontalAlignment="Left" Cursor="Hand">
-                                <TextBlock Text="EN ATTENTE" FontSize="10"
-                                        Foreground="#FFC200" FontWeight="Bold"/>
+                            <TextBlock Grid.Column="6" x:Name="TxtCaisseP2Net" Text="0 FCFA" Foreground="White" FontWeight="Bold" FontSize="12" VerticalAlignment="Center"/>
+                            <Border Grid.Column="7" Background="#0F3460" Padding="8,4" HorizontalAlignment="Left" Cursor="Hand">
+                                <TextBlock Text="EN ATTENTE" FontSize="10" Foreground="#FFC200" FontWeight="Bold"/>
                             </Border>
                         </Grid>
                     </Border>
-
-                    <!-- Ligne pompiste 3 -->
                     <Border Background="#0A1628" Padding="10,8" Margin="0,2">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -825,55 +1170,34 @@
                                 <ColumnDefinition Width="130"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="-- Non affecté --"
-                                    Foreground="#7898B0" FontSize="12" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="1" Text="P3" Foreground="White"
-                                    FontSize="12" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="2" x:Name="TxtCaisseP3Super"
-                                    Text="0.00 L" Foreground="#00C896"
-                                    FontSize="12" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="3" x:Name="TxtCaisseP3Gasoil"
-                                    Text="0.00 L" Foreground="#00C896"
-                                    FontSize="12" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="4" x:Name="TxtCaisseP3Brut"
-                                    Text="0 FCFA" Foreground="White"
-                                    FontSize="12" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="0" Text="-- Non affecté --" Foreground="#7898B0" FontSize="12" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="P3" Foreground="White" FontSize="12" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="2" x:Name="TxtCaisseP3Super" Text="0.00 L" Foreground="#00C896" FontSize="12" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="3" x:Name="TxtCaisseP3Gasoil" Text="0.00 L" Foreground="#00C896" FontSize="12" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="4" x:Name="TxtCaisseP3Brut" Text="0 FCFA" Foreground="White" FontSize="12" VerticalAlignment="Center"/>
                             <StackPanel Grid.Column="5" Orientation="Horizontal">
-                                <TextBlock x:Name="TxtCaisseP3Decharge"
-                                        Text="0 FCFA" Foreground="#DD1F26"
-                                        FontSize="12" VerticalAlignment="Center"/>
-                                <Border Background="#0F3460" Padding="6,3" Margin="8,0,0,0"
-                                        Cursor="Hand" MouseLeftButtonDown="BtnDecharge_Click"
-                                        Tag="P3">
+                                <TextBlock x:Name="TxtCaisseP3Decharge" Text="0 FCFA" Foreground="#DD1F26" FontSize="12" VerticalAlignment="Center"/>
+                                <Border Background="#0F3460" Padding="6,3" Margin="8,0,0,0" Cursor="Hand" MouseLeftButtonDown="BtnDecharge_Click" Tag="P3">
                                     <TextBlock Text="+ Ajouter" FontSize="10" Foreground="#FFC200"/>
                                 </Border>
                             </StackPanel>
-                            <TextBlock Grid.Column="6" x:Name="TxtCaisseP3Net"
-                                    Text="0 FCFA" Foreground="White" FontWeight="Bold"
-                                    FontSize="12" VerticalAlignment="Center"/>
-                            <Border Grid.Column="7" Background="#0F3460" Padding="8,4"
-                                    HorizontalAlignment="Left" Cursor="Hand">
-                                <TextBlock Text="EN ATTENTE" FontSize="10"
-                                        Foreground="#FFC200" FontWeight="Bold"/>
+                            <TextBlock Grid.Column="6" x:Name="TxtCaisseP3Net" Text="0 FCFA" Foreground="White" FontWeight="Bold" FontSize="12" VerticalAlignment="Center"/>
+                            <Border Grid.Column="7" Background="#0F3460" Padding="8,4" HorizontalAlignment="Left" Cursor="Hand">
+                                <TextBlock Text="EN ATTENTE" FontSize="10" Foreground="#FFC200" FontWeight="Bold"/>
                             </Border>
                         </Grid>
                     </Border>
 
-                    <!-- PRÉLÈVEMENTS GLOBAUX -->
                     <TextBlock Text="PRÉLÈVEMENTS GLOBAUX" FontSize="11" FontWeight="Bold"
                             Foreground="#FFC200" Margin="0,25,0,10"/>
-
                     <Border Background="#0A1628" Padding="20">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-
-                            <!-- Charges -->
                             <StackPanel Grid.Column="0" Margin="0,0,15,0">
-                                <TextBlock Text="CHARGES (Dépenses station)" FontSize="11"
-                                        FontWeight="Bold" Foreground="White" Margin="0,0,0,10"/>
+                                <TextBlock Text="CHARGES (Dépenses station)" FontSize="11" FontWeight="Bold" Foreground="White" Margin="0,0,0,10"/>
                                 <Border Background="#0D1F3C" Padding="15">
                                     <StackPanel>
                                         <Grid Margin="0,0,0,8">
@@ -882,40 +1206,24 @@
                                                 <ColumnDefinition Width="120"/>
                                                 <ColumnDefinition Width="80"/>
                                             </Grid.ColumnDefinitions>
-                                            <TextBox Grid.Column="0" x:Name="TxtChargeLibelle"
-                                                    Background="#0F3460" Foreground="White"
-                                                    BorderBrush="#FFC200" BorderThickness="0,0,0,1"
-                                                    Height="32" Padding="8,4" Margin="0,0,8,0"/>
-                                            <TextBox Grid.Column="1" x:Name="TxtChargeMontant"
-                                                    Background="#0F3460" Foreground="White"
-                                                    BorderBrush="#FFC200" BorderThickness="0,0,0,1"
-                                                    Height="32" Padding="8,4" Margin="0,0,8,0"/>
-                                            <Border Grid.Column="2" Background="#DD1F26"
-                                                    Padding="8,6" Cursor="Hand"
-                                                    MouseLeftButtonDown="BtnAjouterCharge_Click">
-                                                <TextBlock Text="+ Ajouter" FontSize="10"
-                                                        FontWeight="Bold" Foreground="White"
-                                                        HorizontalAlignment="Center"/>
+                                            <TextBox Grid.Column="0" x:Name="TxtChargeLibelle" Background="#0F3460" Foreground="White" BorderBrush="#FFC200" BorderThickness="0,0,0,1" Height="32" Padding="8,4" Margin="0,0,8,0"/>
+                                            <TextBox Grid.Column="1" x:Name="TxtChargeMontant" Background="#0F3460" Foreground="White" BorderBrush="#FFC200" BorderThickness="0,0,0,1" Height="32" Padding="8,4" Margin="0,0,8,0"/>
+                                            <Border Grid.Column="2" Background="#DD1F26" Padding="8,6" Cursor="Hand" MouseLeftButtonDown="BtnAjouterCharge_Click">
+                                                <TextBlock Text="+ Ajouter" FontSize="10" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
                                             </Border>
                                         </Grid>
                                         <Rectangle Height="1" Fill="#1A2D50" Margin="0,5,0,8"/>
                                         <StackPanel x:Name="ListeCharges"/>
                                         <Rectangle Height="1" Fill="#1A2D50" Margin="0,8,0,5"/>
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                            <TextBlock Text="TOTAL CHARGES : " FontSize="11"
-                                                    FontWeight="Bold" Foreground="#888888"/>
-                                            <TextBlock x:Name="TxtTotalCharges" Text="0 FCFA"
-                                                    FontSize="11" FontWeight="Bold"
-                                                    Foreground="#DD1F26"/>
+                                            <TextBlock Text="TOTAL CHARGES : " FontSize="11" FontWeight="Bold" Foreground="#888888"/>
+                                            <TextBlock x:Name="TxtTotalCharges" Text="0 FCFA" FontSize="11" FontWeight="Bold" Foreground="#DD1F26"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </Border>
                             </StackPanel>
-
-                            <!-- Avances sur salaire -->
                             <StackPanel Grid.Column="1">
-                                <TextBlock Text="AVANCES SUR SALAIRE" FontSize="11"
-                                        FontWeight="Bold" Foreground="White" Margin="0,0,0,10"/>
+                                <TextBlock Text="AVANCES SUR SALAIRE" FontSize="11" FontWeight="Bold" Foreground="White" Margin="0,0,0,10"/>
                                 <Border Background="#0D1F3C" Padding="15">
                                     <StackPanel>
                                         <Grid Margin="0,0,0,8">
@@ -924,31 +1232,18 @@
                                                 <ColumnDefinition Width="120"/>
                                                 <ColumnDefinition Width="80"/>
                                             </Grid.ColumnDefinitions>
-                                            <TextBox Grid.Column="0" x:Name="TxtAvancePersonnel"
-                                                    Background="#0F3460" Foreground="White"
-                                                    BorderBrush="#FFC200" BorderThickness="0,0,0,1"
-                                                    Height="32" Padding="8,4" Margin="0,0,8,0"/>
-                                            <TextBox Grid.Column="1" x:Name="TxtAvanceMontant"
-                                                    Background="#0F3460" Foreground="White"
-                                                    BorderBrush="#FFC200" BorderThickness="0,0,0,1"
-                                                    Height="32" Padding="8,4" Margin="0,0,8,0"/>
-                                            <Border Grid.Column="2" Background="#DD1F26"
-                                                    Padding="8,6" Cursor="Hand"
-                                                    MouseLeftButtonDown="BtnAjouterAvance_Click">
-                                                <TextBlock Text="+ Ajouter" FontSize="10"
-                                                        FontWeight="Bold" Foreground="White"
-                                                        HorizontalAlignment="Center"/>
+                                            <TextBox Grid.Column="0" x:Name="TxtAvancePersonnel" Background="#0F3460" Foreground="White" BorderBrush="#FFC200" BorderThickness="0,0,0,1" Height="32" Padding="8,4" Margin="0,0,8,0"/>
+                                            <TextBox Grid.Column="1" x:Name="TxtAvanceMontant" Background="#0F3460" Foreground="White" BorderBrush="#FFC200" BorderThickness="0,0,0,1" Height="32" Padding="8,4" Margin="0,0,8,0"/>
+                                            <Border Grid.Column="2" Background="#DD1F26" Padding="8,6" Cursor="Hand" MouseLeftButtonDown="BtnAjouterAvance_Click">
+                                                <TextBlock Text="+ Ajouter" FontSize="10" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
                                             </Border>
                                         </Grid>
                                         <Rectangle Height="1" Fill="#1A2D50" Margin="0,5,0,8"/>
                                         <StackPanel x:Name="ListeAvances"/>
                                         <Rectangle Height="1" Fill="#1A2D50" Margin="0,8,0,5"/>
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                            <TextBlock Text="TOTAL AVANCES : " FontSize="11"
-                                                    FontWeight="Bold" Foreground="#888888"/>
-                                            <TextBlock x:Name="TxtTotalAvances" Text="0 FCFA"
-                                                    FontSize="11" FontWeight="Bold"
-                                                    Foreground="#DD1F26"/>
+                                            <TextBlock Text="TOTAL AVANCES : " FontSize="11" FontWeight="Bold" Foreground="#888888"/>
+                                            <TextBlock x:Name="TxtTotalAvances" Text="0 FCFA" FontSize="11" FontWeight="Bold" Foreground="#DD1F26"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </Border>
@@ -956,83 +1251,53 @@
                         </Grid>
                     </Border>
 
-                    <!-- RÉCAPITULATIF GLOBAL -->
-                    <TextBlock Text="RÉCAPITULATIF GLOBAL DU JOUR" FontSize="11"
-                            FontWeight="Bold" Foreground="#FFC200" Margin="0,25,0,10"/>
-
+                    <TextBlock Text="RÉCAPITULATIF GLOBAL DU JOUR" FontSize="11" FontWeight="Bold"
+                            Foreground="#FFC200" Margin="0,25,0,10"/>
                     <Border Background="#0D1F3C" Padding="25">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="200"/>
                             </Grid.ColumnDefinitions>
-
                             <StackPanel Grid.Column="0">
-                                <!-- Total Super -->
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                                    <TextBlock Text="Total Super vendu : " FontSize="12"
-                                            Foreground="#888888" Width="200"/>
-                                    <TextBlock x:Name="TxtRecapSuper" Text="0.00 L"
-                                            FontSize="12" Foreground="#00C896" Width="100"/>
-                                    <TextBlock x:Name="TxtRecapSuperMontant" Text="0 FCFA"
-                                            FontSize="12" Foreground="White"/>
+                                    <TextBlock Text="Total Super vendu : " FontSize="12" Foreground="#888888" Width="200"/>
+                                    <TextBlock x:Name="TxtRecapSuper" Text="0.00 L" FontSize="12" Foreground="#00C896" Width="100"/>
+                                    <TextBlock x:Name="TxtRecapSuperMontant" Text="0 FCFA" FontSize="12" Foreground="White"/>
                                 </StackPanel>
-                                <!-- Total Gasoil -->
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                                    <TextBlock Text="Total Gasoil vendu : " FontSize="12"
-                                            Foreground="#888888" Width="200"/>
-                                    <TextBlock x:Name="TxtRecapGasoil" Text="0.00 L"
-                                            FontSize="12" Foreground="#00C896" Width="100"/>
-                                    <TextBlock x:Name="TxtRecapGasoilMontant" Text="0 FCFA"
-                                            FontSize="12" Foreground="White"/>
+                                    <TextBlock Text="Total Gasoil vendu : " FontSize="12" Foreground="#888888" Width="200"/>
+                                    <TextBlock x:Name="TxtRecapGasoil" Text="0.00 L" FontSize="12" Foreground="#00C896" Width="100"/>
+                                    <TextBlock x:Name="TxtRecapGasoilMontant" Text="0 FCFA" FontSize="12" Foreground="White"/>
                                 </StackPanel>
                                 <Rectangle Height="1" Fill="#1A2D50" Margin="0,8,0,8"/>
-                                <!-- Ventes brutes -->
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                                    <TextBlock Text="Total ventes brutes : " FontSize="12"
-                                            Foreground="#888888" Width="200"/>
-                                    <TextBlock x:Name="TxtRecapBrut" Text="0 FCFA"
-                                            FontSize="12" Foreground="White" FontWeight="Bold"/>
+                                    <TextBlock Text="Total ventes brutes : " FontSize="12" Foreground="#888888" Width="200"/>
+                                    <TextBlock x:Name="TxtRecapBrut" Text="0 FCFA" FontSize="12" Foreground="White" FontWeight="Bold"/>
                                 </StackPanel>
-                                <!-- Décharges -->
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                                    <TextBlock Text="+ Décharges collectées : " FontSize="12"
-                                            Foreground="#888888" Width="200"/>
-                                    <TextBlock x:Name="TxtRecapDecharges" Text="0 FCFA"
-                                            FontSize="12" Foreground="#00C896"/>
+                                    <TextBlock Text="+ Décharges collectées : " FontSize="12" Foreground="#888888" Width="200"/>
+                                    <TextBlock x:Name="TxtRecapDecharges" Text="0 FCFA" FontSize="12" Foreground="#00C896"/>
                                 </StackPanel>
-                                <!-- Charges -->
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                                    <TextBlock Text="- Charges station : " FontSize="12"
-                                            Foreground="#888888" Width="200"/>
-                                    <TextBlock x:Name="TxtRecapCharges" Text="0 FCFA"
-                                            FontSize="12" Foreground="#DD1F26"/>
+                                    <TextBlock Text="- Charges station : " FontSize="12" Foreground="#888888" Width="200"/>
+                                    <TextBlock x:Name="TxtRecapCharges" Text="0 FCFA" FontSize="12" Foreground="#DD1F26"/>
                                 </StackPanel>
-                                <!-- Avances -->
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                                    <TextBlock Text="- Avances sur salaire : " FontSize="12"
-                                            Foreground="#888888" Width="200"/>
-                                    <TextBlock x:Name="TxtRecapAvances" Text="0 FCFA"
-                                            FontSize="12" Foreground="#DD1F26"/>
+                                    <TextBlock Text="- Avances sur salaire : " FontSize="12" Foreground="#888888" Width="200"/>
+                                    <TextBlock x:Name="TxtRecapAvances" Text="0 FCFA" FontSize="12" Foreground="#DD1F26"/>
                                 </StackPanel>
                                 <Rectangle Height="2" Fill="#FFC200" Margin="0,10,0,10"/>
-                                <!-- Caisse nette -->
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="CAISSE NETTE TOTALE : " FontSize="14"
-                                            FontWeight="Bold" Foreground="White" Width="200"/>
-                                    <TextBlock x:Name="TxtCaisseNette" Text="0 FCFA"
-                                            FontSize="14" FontWeight="Bold" Foreground="#FFC200"/>
+                                    <TextBlock Text="CAISSE NETTE TOTALE : " FontSize="14" FontWeight="Bold" Foreground="White" Width="200"/>
+                                    <TextBlock x:Name="TxtCaisseNette" Text="0 FCFA" FontSize="14" FontWeight="Bold" Foreground="#FFC200"/>
                                 </StackPanel>
                             </StackPanel>
-
-                            <!-- Bouton clôture -->
-                            <StackPanel Grid.Column="1" VerticalAlignment="Center"
-                                        HorizontalAlignment="Center">
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
                                 <Border Background="#DD1F26" Padding="20,15" Cursor="Hand"
                                         MouseLeftButtonDown="BtnCloturerCaisse_Click">
                                     <StackPanel>
-                                        <TextBlock Text="🔒" FontSize="24"
-                                                HorizontalAlignment="Center"/>
+                                        <TextBlock Text="🔒" FontSize="24" HorizontalAlignment="Center"/>
                                         <TextBlock Text="CLÔTURER LA CAISSE" FontSize="12"
                                                 FontWeight="Bold" Foreground="White"
                                                 HorizontalAlignment="Center" Margin="0,8,0,0"/>
@@ -1041,7 +1306,6 @@
                             </StackPanel>
                         </Grid>
                     </Border>
-
                 </StackPanel>
             </ScrollViewer>
 
@@ -1107,6 +1371,7 @@
                     </Border>
                 </StackPanel>
             </ScrollViewer>
+
         </Grid>
     </Grid>
 </Window>
