@@ -166,16 +166,15 @@ App démarrage
 - [x] Schéma BDD (21 tables)
 - [x] LoginWindow (authentification locale provisoire)
 - [x] AdminDashboard (tableau de bord admin avec navigation)
-- [x] ShellPisteWindow (saisie des index, calculs automatiques)
+- [x] ShellPisteWindow entièrement refaite (menu 4 panels + 5 sections indexes, commitée)
 - [x] Caisse du Jour (décharges, prélèvements, clôture)
 - [x] Structure backend Rust/Axum (main.rs + db/mod.rs + Cargo.toml)
+- [x] Correction bug double instance : suppression `StartupUri` dans `App.xaml` (fenêtre créée uniquement par `OnStartup`)
 
 ### En cours 🔄
-- [ ] ShellPisteWindow refaite mais **non commitée** (modifications en attente de commit)
 - [ ] Logique de persistance (boutons Sauvegarder / Valider / Clôturer → TODO en dur, API Rust non connectée)
 
 ### À faire 📋
-- [ ] Commit des modifications actuelles sur `ShellPisteWindow.xaml` et `.xaml.cs`
 - [ ] Remplacer l'authentification hardcodée par un appel à l'API Rust
 - [ ] Connexion API Rust ↔ Frontend WPF (endpoints à implémenter)
 - [ ] Gestion des rôles (Manager, Chef de Piste, etc.) dans le routing post-login
@@ -194,8 +193,9 @@ App démarrage
 | 2026-04-08 | Schéma BDD étendu à 21 tables, ShellPisteWindow et Caisse du Jour créés, règles métier documentées |
 | 2026-04-08 | Ajout LoginWindow (auth provisoire), AdminDashboard avec navigation, initialisation backend Rust/Axum |
 | 2026-05-14 | Lecture du projet, lancement de l'app WPF (`dotnet run`), mise à jour de CONTEXT.md pour refléter l'état réel du code |
-| 2026-05-18 | ShellPisteWindow entièrement refaite : menu latéral 4 panels (Indexes, Caisse, Cuves, Ventes), 5 sections dans le panel Indexes (Agent/Plage, Grille pompes, Paiements, Prélèvements, Résumé caisse), calculs automatiques cash/écart, modifications non commitées |
+| 2026-05-18 | ShellPisteWindow entièrement refaite : menu latéral 4 panels (Indexes, Caisse, Cuves, Ventes), 5 sections dans le panel Indexes (Agent/Plage, Grille pompes, Paiements, Prélèvements, Résumé caisse), calculs automatiques cash/écart — commitée et pushée sur GitHub |
+| 2026-05-26 | Correction bug double instance (`StartupUri` + `OnStartup` ouvraient chacun une LoginWindow) — suppression `StartupUri` dans `App.xaml`, correction pushée |
 
 ---
 
-*Dernière mise à jour : 2026-05-18 (Claude Code — session)*
+*Dernière mise à jour : 2026-05-26 (Claude Code — session)*
