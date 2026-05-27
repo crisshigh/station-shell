@@ -110,15 +110,15 @@ Admin
 - Design dark theme cohérent
 
 ### 3. ShellPisteWindow (`Views/ShellPisteWindow.xaml` + `.xaml.cs`)
-Interface principale de gestion de la piste — **entièrement refaite** (session 2026-05-18).
+Interface principale de gestion de la piste — **refaite en profondeur** (sessions 2026-05-18 et 2026-05-27).
 Menu latéral avec 4 panels : Indexes Pompes · Caisse du Jour · Cuves · Ventes Piste.
 
-**Panel Indexes (5 sections) :**
-- **Sect. 1 — Agent & Plage horaire** : ComboBox agent + DatePickers début/fin + champs heure
-- **Sect. 2 — Indexes Pompes** : grille 8 colonnes (Îlot, Pompe, Carburant, Idx Départ, Idx Arrivée, Qté, P.U, Montant) · 6 lignes · calcul auto Qté et Montant · ligne TOTAL GÉNÉRAL
-- **Sect. 3 — Moyens de paiement** : TPE, WAVE, Orange Money, Cash calculé automatiquement (= Total carburant − TPE − WAVE − Orange)
-- **Sect. 4 — Prélèvements** : 3 colonnes — A. Charges/Dépenses du jour (liste dynamique), B. Bons (bénéficiaire + type), C. Décharges (montant + motif)
-- **Sect. 5 — Résumé Caisse Carburant** : récap total carb + détail paiements + champ "total versé par l'agent" + calcul écart + boutons Enregistrer Manquant / Sauvegarder / Valider
+**Panel Indexes (3 sections) :**
+- **Sect. 1 — Agents & Plage horaire** : 3 slots horizontaux (CbAgent1/2/3 + CbIlotAgent1/2/3) + DatePickers début/fin stylisés (texte visible sur fond sombre via `DatePickerTextBox` resource, début=jaune #FFC200, fin=rouge #DD1F26)
+- **Sect. 2 — Indexes Pompes** : grille 9 colonnes (Pompiste, Îlot, Pompe, Carburant, Idx Départ, Idx Arrivée, Qté, P.U, Montant) · 6 lignes · TxtPompiste1–6 auto-remplis selon mapping îlot→agent · calcul auto Qté et Montant · ligne TOTAL GÉNÉRAL · tous les montants formatés avec séparateur milliers
+- **Sect. 3 — Résumé Indexes Pompes** : `PanelResumeAgents` (StackPanel) généré dynamiquement — une section par agent avec total Super L + montant, total Gasoil L + montant, Total FCFA
+- Boutons : Sauvegarder (#0F3460) + Valider (#DD1F26) en bas du panel
+- *Anciennes Sections 3/4/5 (Paiements, Prélèvements, Résumé Caisse) supprimées du panel Indexes*
 
 **Panel Caisse du Jour** : tableau par pompiste (Super L, Gasoil L, Ventes Brutes, Décharges, Net à remettre) · Prélèvements globaux (Charges + Avances sur salaire) · Récapitulatif global (Caisse Nette) · Bouton Clôturer
 
@@ -128,11 +128,13 @@ Menu latéral avec 4 panels : Indexes Pompes · Caisse du Jour · Cuves · Vente
 
 **Code-behind :**
 - Guard `_isLoaded` · `ShowPanel()` pour navigation entre les 4 panels
-- Calcul automatique : `IndexArrivee_Changed` → `CalculerLigne` → `CalculerTotaux` → `RecalculerCash` → `RecalculerResume`
-- `Ilot_Changed` : synchronise le ComboBox Pompe selon l'Îlot choisi
+- Helpers formatage : `Fmt(decimal)` → "N0 FCFA" · `FmtL(decimal)` → "N2 L" · `ParseDec(string, out decimal)` → parse avec séparateur milliers (`NumberStyles.Number`)
+- Calcul automatique : `IndexArrivee_Changed` → `CalculerLigne` → `CalculerTotaux` → `GenererResumeAgents`
+- `IlotAgent_Changed` : déclenché par CbIlotAgent1/2/3 → `MettreAJourPompistes` + `GenererResumeAgents`
+- `Ilot_Changed` : synchronise ComboBox Pompe + `MettreAJourPompistes` + `GenererResumeAgents`
 - `Carburant_Changed` : met à jour le prix unitaire et recalcule
-- Handlers Section 4 : `BtnAjouterDepense_Click`, `BtnAjouterBon_Click`, `BtnAjouterDecharge_Click` + helper `AjouterLigneListe`
-- `BtnEnregistrerManquant_Click` : vérifie l'écart et demande confirmation
+- `MettreAJourPompistes` : mappe îlot → agent (GetAgentPourIlot) et remplit TxtPompiste1–6
+- `GenererResumeAgents` : vide PanelResumeAgents et reconstruit une section par agent (BuildAgentResumeSection)
 - Caisse panel : `BtnDecharge_Click`, `BtnAjouterCharge_Click`, `BtnAjouterAvance_Click`, `MettreAJourCaisse`
 
 ---
@@ -170,6 +172,7 @@ App démarrage
 - [x] Caisse du Jour (décharges, prélèvements, clôture)
 - [x] Structure backend Rust/Axum (main.rs + db/mod.rs + Cargo.toml)
 - [x] Correction bug double instance : suppression `StartupUri` dans `App.xaml` (fenêtre créée uniquement par `OnStartup`)
+- [x] ShellPisteWindow refaite en profondeur (session 2026-05-27) : 3 slots agents horizontaux, colonne Pompiste auto, Résumé Agents dynamique, séparateur milliers sur tous les montants, DatePickers corrigés (texte visible + couleurs début/fin correctes)
 
 ### En cours 🔄
 - [ ] Logique de persistance (boutons Sauvegarder / Valider / Clôturer → TODO en dur, API Rust non connectée)
@@ -195,7 +198,8 @@ App démarrage
 | 2026-05-14 | Lecture du projet, lancement de l'app WPF (`dotnet run`), mise à jour de CONTEXT.md pour refléter l'état réel du code |
 | 2026-05-18 | ShellPisteWindow entièrement refaite : menu latéral 4 panels (Indexes, Caisse, Cuves, Ventes), 5 sections dans le panel Indexes (Agent/Plage, Grille pompes, Paiements, Prélèvements, Résumé caisse), calculs automatiques cash/écart — commitée et pushée sur GitHub |
 | 2026-05-26 | Correction bug double instance (`StartupUri` + `OnStartup` ouvraient chacun une LoginWindow) — suppression `StartupUri` dans `App.xaml`, correction pushée |
+| 2026-05-27 | ShellPisteWindow : 3 slots agents horizontaux (CbAgent1/2/3 + CbIlotAgent1/2/3), colonne Pompiste auto dans la grille, Résumé Agents dynamique (PanelResumeAgents), séparateur milliers sur tous les montants (Fmt/FmtL/ParseDec), DatePickers corrigés (texte visible + couleurs début=jaune/fin=rouge correctes) |
 
 ---
 
-*Dernière mise à jour : 2026-05-26 (Claude Code — session)*
+*Dernière mise à jour : 2026-05-27 (Claude Code — session)*

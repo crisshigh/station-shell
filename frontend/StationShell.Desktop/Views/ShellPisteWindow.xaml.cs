@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -14,16 +15,24 @@ namespace StationShell.Desktop.Views
         private decimal _prixGasoil = 680m;
         private decimal[] _indexDepart = { 0, 0, 0, 0, 0, 0 };
 
-        // Section 4 totaux
-        private decimal _totalDepensesJour = 0;
-        private decimal _totalBons = 0;
-        private decimal _totalDechargesIndex = 0;
-        private List<string> _designationsCourantes = new();
-
-        // Caisse panel (section existante)
+        // Caisse panel
         private decimal _totalCharges = 0;
         private decimal _totalAvances = 0;
         private decimal[] _decharges = { 0, 0, 0 };
+
+        // ===== FORMATAGE =====
+        private static string Fmt(decimal v) =>
+            v.ToString("N0", CultureInfo.CurrentCulture) + " FCFA";
+
+        private static string FmtL(decimal v) =>
+            v.ToString("N2", CultureInfo.CurrentCulture) + " L";
+
+        private static bool ParseDec(string? text, out decimal value) =>
+            decimal.TryParse(
+                text ?? "",
+                NumberStyles.Number,
+                CultureInfo.CurrentCulture,
+                out value);
 
         public ShellPisteWindow()
         {
@@ -79,6 +88,43 @@ namespace StationShell.Desktop.Views
                 ? Brushes.Firebrick : Brushes.Transparent;
         }
 
+        // ===== AFFECTATION AGENTS → ÎLOTS =====
+        private void IlotAgent_Changed(object sender, SelectionChangedEventArgs e)
+        {
+            if (!_isLoaded) return;
+            MettreAJourPompistes();
+            GenererResumeAgents();
+        }
+
+        private string GetAgentNom(ComboBox cb) =>
+            cb.SelectedItem is ComboBoxItem item && item.Content?.ToString() != "-- Aucun --"
+                ? item.Content?.ToString() ?? "" : "";
+
+        private string GetIlotNom(ComboBox cb) =>
+            cb.SelectedItem is ComboBoxItem item && item.Content?.ToString() != "-- Aucun --"
+                ? item.Content?.ToString() ?? "" : "";
+
+        private string GetAgentPourIlot(string ilotNom)
+        {
+            if (!string.IsNullOrEmpty(ilotNom))
+            {
+                if (GetIlotNom(CbIlotAgent1) == ilotNom) return GetAgentNom(CbAgent1);
+                if (GetIlotNom(CbIlotAgent2) == ilotNom) return GetAgentNom(CbAgent2);
+                if (GetIlotNom(CbIlotAgent3) == ilotNom) return GetAgentNom(CbAgent3);
+            }
+            return "";
+        }
+
+        private void MettreAJourPompistes()
+        {
+            TxtPompiste1.Text = GetAgentPourIlot(GetIlotNom(CbIlot1));
+            TxtPompiste2.Text = GetAgentPourIlot(GetIlotNom(CbIlot2));
+            TxtPompiste3.Text = GetAgentPourIlot(GetIlotNom(CbIlot3));
+            TxtPompiste4.Text = GetAgentPourIlot(GetIlotNom(CbIlot4));
+            TxtPompiste5.Text = GetAgentPourIlot(GetIlotNom(CbIlot5));
+            TxtPompiste6.Text = GetAgentPourIlot(GetIlotNom(CbIlot6));
+        }
+
         // ===== CALCUL AUTOMATIQUE =====
         private void IndexArrivee_Changed(object sender, TextChangedEventArgs? e)
         {
@@ -98,18 +144,19 @@ namespace StationShell.Desktop.Views
             CalculerLigne(TxtArr5, TxtQte5, TxtTotal5, TxtPu5, _indexDepart[4]);
             CalculerLigne(TxtArr6, TxtQte6, TxtTotal6, TxtPu6, _indexDepart[5]);
             CalculerTotaux();
+            GenererResumeAgents();
         }
 
         private void CalculerLigne(TextBox txtArrivee, TextBox txtQte,
             TextBox txtTotal, TextBox txtPu, decimal indexDepart)
         {
-            if (decimal.TryParse(txtArrivee.Text, out decimal arrivee) &&
-                decimal.TryParse(txtPu.Text, out decimal pu))
+            if (ParseDec(txtArrivee.Text, out decimal arrivee) &&
+                ParseDec(txtPu.Text, out decimal pu))
             {
                 decimal qte = arrivee - indexDepart;
                 if (qte < 0) qte = 0;
-                txtQte.Text = qte.ToString("F2");
-                txtTotal.Text = (qte * pu).ToString("F0");
+                txtQte.Text = qte.ToString("N2", CultureInfo.CurrentCulture);
+                txtTotal.Text = (qte * pu).ToString("N0", CultureInfo.CurrentCulture);
             }
             else
             {
@@ -130,16 +177,15 @@ namespace StationShell.Desktop.Views
                 (TxtQte5, TxtTotal5), (TxtQte6, TxtTotal6)
             })
             {
-                if (decimal.TryParse(qte.Text, out decimal q)) totalQte += q;
-                if (decimal.TryParse(total.Text, out decimal t)) totalMontant += t;
+                if (ParseDec(qte.Text, out decimal q)) totalQte += q;
+                if (ParseDec(total.Text, out decimal t)) totalMontant += t;
             }
 
-            TxtTotalQte.Text = totalQte.ToString("F2") + " L";
-            TxtTotalMontant.Text = totalMontant.ToString("F0") + " FCFA";
-            RecalculerCash();
+            TxtTotalQte.Text = FmtL(totalQte);
+            TxtTotalMontant.Text = Fmt(totalMontant);
         }
 
-        // ===== LIAISON ÎLOT → POMPE =====
+        // ===== LIAISON ÎLOT → POMPE + POMPISTE =====
         private void Ilot_Changed(object sender, SelectionChangedEventArgs e)
         {
             if (!_isLoaded) return;
@@ -161,6 +207,9 @@ namespace StationShell.Desktop.Views
 
             if (cbPompe != null && idx < cbPompe.Items.Count)
                 cbPompe.SelectedIndex = idx;
+
+            MettreAJourPompistes();
+            GenererResumeAgents();
         }
 
         // ===== CHANGEMENT CARBURANT =====
@@ -185,199 +234,145 @@ namespace StationShell.Desktop.Views
             }
         }
 
-        // ===== MOYENS DE PAIEMENT =====
-        private void Paiement_Changed(object sender, TextChangedEventArgs e)
+        // ===== RÉSUMÉ INDEXES POMPES =====
+        private void GenererResumeAgents()
         {
-            if (!_isLoaded) return;
-            RecalculerCash();
-        }
+            if (!_isLoaded || PanelResumeAgents == null) return;
+            PanelResumeAgents.Children.Clear();
 
-        private decimal GetTotalMontantCarburant()
-        {
-            if (TxtTotalMontant == null) return 0;
-            string raw = TxtTotalMontant.Text.Replace(" FCFA", "").Trim();
-            return decimal.TryParse(raw, out decimal v) ? v : 0;
-        }
-
-        private void RecalculerCash()
-        {
-            if (!_isLoaded) return;
-            if (TxtTPE == null || TxtWAVE == null || TxtOrangeMoney == null || TxtCash == null) return;
-
-            decimal total = GetTotalMontantCarburant();
-            decimal.TryParse(TxtTPE.Text, out decimal tpe);
-            decimal.TryParse(TxtWAVE.Text, out decimal wave);
-            decimal.TryParse(TxtOrangeMoney.Text, out decimal orange);
-
-            decimal cash = total - tpe - wave - orange;
-            if (cash < 0) cash = 0;
-            TxtCash.Text = cash.ToString("F0");
-            RecalculerResume();
-        }
-
-        // ===== SECTION 4 — PRÉLÈVEMENTS =====
-
-        private void BtnAjouterDepense_Click(object sender, MouseButtonEventArgs e)
-        {
-            string libelle = TxtNouveauLibelle.Text.Trim();
-            if (string.IsNullOrEmpty(libelle) &&
-                CbDepensesCourantes.SelectedItem is ComboBoxItem sel &&
-                sel.Content?.ToString() != "-- Sélectionner --")
+            var agentSlots = new[]
             {
-                libelle = sel.Content?.ToString() ?? "";
-            }
-
-            if (string.IsNullOrEmpty(libelle) ||
-                !decimal.TryParse(TxtMontantDepense.Text, out decimal montant) || montant <= 0)
-            {
-                MessageBox.Show("Veuillez saisir une désignation et un montant valide.",
-                    "Attention", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            if (!_designationsCourantes.Contains(libelle))
-            {
-                _designationsCourantes.Add(libelle);
-                CbDepensesCourantes.Items.Add(new ComboBoxItem { Content = libelle });
-            }
-
-            AjouterLigneListe(ListeDepensesJour, libelle, montant);
-            _totalDepensesJour += montant;
-            TxtTotalDepensesJour.Text = _totalDepensesJour.ToString("F0") + " FCFA";
-            TxtNouveauLibelle.Text = "";
-            TxtMontantDepense.Text = "";
-            RecalculerResume();
-        }
-
-        private void BtnAjouterBon_Click(object sender, MouseButtonEventArgs e)
-        {
-            string beneficiaire = (CbBeneficiaireBon.SelectedItem is ComboBoxItem b
-                && b.Content?.ToString() != "-- Choisir --")
-                ? b.Content?.ToString() ?? "" : "";
-            string typeBon = (CbTypeBon.SelectedItem is ComboBoxItem t)
-                ? t.Content?.ToString() ?? "" : "";
-
-            if (string.IsNullOrEmpty(beneficiaire) ||
-                !decimal.TryParse(TxtMontantBon.Text, out decimal montant) || montant <= 0)
-            {
-                MessageBox.Show("Veuillez choisir un bénéficiaire et saisir un montant valide.",
-                    "Attention", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            string label = $"{beneficiaire} ({typeBon})";
-            AjouterLigneListe(ListeBons, label, montant);
-            _totalBons += montant;
-            TxtTotalBons.Text = _totalBons.ToString("F0") + " FCFA";
-            TxtMontantBon.Text = "";
-            RecalculerResume();
-        }
-
-        private void BtnAjouterDecharge_Click(object sender, MouseButtonEventArgs e)
-        {
-            string motif = TxtMotifDecharge.Text.Trim();
-            if (!decimal.TryParse(TxtMontantDecharge.Text, out decimal montant) || montant <= 0)
-            {
-                MessageBox.Show("Veuillez saisir un montant valide.",
-                    "Attention", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            string label = string.IsNullOrEmpty(motif) ? "Décharge" : motif;
-            AjouterLigneListe(ListeDechargesIndex, label, montant);
-            _totalDechargesIndex += montant;
-            TxtTotalDechargesIndex.Text = _totalDechargesIndex.ToString("F0") + " FCFA";
-            TxtMontantDecharge.Text = "";
-            TxtMotifDecharge.Text = "";
-            RecalculerResume();
-        }
-
-        private void AjouterLigneListe(StackPanel liste, string label, decimal montant)
-        {
-            var ligne = new Grid { Margin = new Thickness(0, 3, 0, 3) };
-            ligne.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            ligne.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(100) });
-
-            var txtLib = new TextBlock
-            {
-                Text = label, Foreground = Brushes.White, FontSize = 11
-            };
-            var txtMnt = new TextBlock
-            {
-                Text = montant.ToString("F0") + " FCFA",
-                Foreground = Brushes.OrangeRed, FontSize = 11,
-                HorizontalAlignment = HorizontalAlignment.Right
+                (cbNom: CbAgent1, cbIlot: CbIlotAgent1),
+                (cbNom: CbAgent2, cbIlot: CbIlotAgent2),
+                (cbNom: CbAgent3, cbIlot: CbIlotAgent3),
             };
 
-            Grid.SetColumn(txtLib, 0);
-            Grid.SetColumn(txtMnt, 1);
-            ligne.Children.Add(txtLib);
-            ligne.Children.Add(txtMnt);
-            liste.Children.Add(ligne);
-        }
-
-        // ===== SECTION 5 — RÉSUMÉ =====
-        private void RecalculerResume()
-        {
-            if (!_isLoaded) return;
-            if (TxtResumeTotalCarb == null) return;
-
-            decimal total = GetTotalMontantCarburant();
-            decimal.TryParse(TxtTPE.Text, out decimal tpe);
-            decimal.TryParse(TxtWAVE.Text, out decimal wave);
-            decimal.TryParse(TxtOrangeMoney.Text, out decimal orange);
-            decimal.TryParse(TxtCash.Text, out decimal cash);
-
-            TxtResumeTotalCarb.Text = total.ToString("F0") + " FCFA";
-            TxtResumeTPE.Text = tpe.ToString("F0") + " FCFA";
-            TxtResumeWAVE.Text = wave.ToString("F0") + " FCFA";
-            TxtResumeOrange.Text = orange.ToString("F0") + " FCFA";
-            TxtResumeCash.Text = cash.ToString("F0") + " FCFA";
-
-            decimal.TryParse(TxtVersePompiste.Text, out decimal verse);
-            decimal ecart = cash - verse;
-            TxtEcartCaisse.Text = ecart.ToString("F0") + " FCFA";
-            TxtEcartCaisse.Foreground = ecart < 0
-                ? new SolidColorBrush(Color.FromRgb(0xDD, 0x1F, 0x26))
-                : new SolidColorBrush(Color.FromRgb(0x00, 0xC8, 0x96));
-        }
-
-        private void TxtVerse_Changed(object sender, TextChangedEventArgs e)
-        {
-            if (!_isLoaded) return;
-            RecalculerResume();
-        }
-
-        private void BtnEnregistrerManquant_Click(object sender, MouseButtonEventArgs e)
-        {
-            if (!decimal.TryParse(TxtEcartCaisse.Text.Replace(" FCFA", "").Trim(), out decimal ecart) || ecart >= 0)
+            var lignes = new[]
             {
-                MessageBox.Show("Aucun manquant à enregistrer (écart positif ou nul).",
-                    "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
+                (cbIlot: CbIlot1, cbCarb: CbCarb1, txtQte: TxtQte1, txtTotal: TxtTotal1),
+                (cbIlot: CbIlot2, cbCarb: CbCarb2, txtQte: TxtQte2, txtTotal: TxtTotal2),
+                (cbIlot: CbIlot3, cbCarb: CbCarb3, txtQte: TxtQte3, txtTotal: TxtTotal3),
+                (cbIlot: CbIlot4, cbCarb: CbCarb4, txtQte: TxtQte4, txtTotal: TxtTotal4),
+                (cbIlot: CbIlot5, cbCarb: CbCarb5, txtQte: TxtQte5, txtTotal: TxtTotal5),
+                (cbIlot: CbIlot6, cbCarb: CbCarb6, txtQte: TxtQte6, txtTotal: TxtTotal6),
+            };
+
+            bool hasContent = false;
+
+            foreach (var slot in agentSlots)
+            {
+                string agentNom = GetAgentNom(slot.cbNom);
+                if (string.IsNullOrEmpty(agentNom)) continue;
+
+                string ilotAffecte = GetIlotNom(slot.cbIlot);
+
+                decimal qteSuper = 0, montantSuper = 0;
+                decimal qteGasoil = 0, montantGasoil = 0;
+
+                foreach (var ligne in lignes)
+                {
+                    string ligneIlot = GetIlotNom(ligne.cbIlot);
+                    if (string.IsNullOrEmpty(ilotAffecte) || ligneIlot != ilotAffecte) continue;
+
+                    string carb = ligne.cbCarb.SelectedItem is ComboBoxItem ci
+                        ? ci.Content?.ToString() ?? "" : "";
+                    ParseDec(ligne.txtQte.Text, out decimal qte);
+                    ParseDec(ligne.txtTotal.Text, out decimal montant);
+
+                    if (carb == "Super") { qteSuper += qte; montantSuper += montant; }
+                    else                 { qteGasoil += qte; montantGasoil += montant; }
+                }
+
+                PanelResumeAgents.Children.Add(
+                    BuildAgentResumeSection(agentNom, ilotAffecte,
+                        qteSuper, montantSuper, qteGasoil, montantGasoil));
+                hasContent = true;
             }
 
-            string agent = (CbAgent.SelectedItem is ComboBoxItem a && a.Content?.ToString() != "-- Choisir un agent --")
-                ? a.Content?.ToString() ?? "Agent inconnu" : "Agent inconnu";
-
-            var result = MessageBox.Show(
-                $"Enregistrer un manquant de {Math.Abs(ecart):F0} FCFA pour {agent} ?",
-                "Enregistrement manquant",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Warning);
-
-            if (result == MessageBoxResult.Yes)
+            if (!hasContent)
             {
-                TxtStatut.Text = $"⚠ Manquant de {Math.Abs(ecart):F0} FCFA enregistré pour {agent}.";
-                TxtStatut.Foreground = new SolidColorBrush(Color.FromRgb(0xFF, 0xC2, 0x00));
-                TxtStatut.Visibility = Visibility.Visible;
+                PanelResumeAgents.Children.Add(new TextBlock
+                {
+                    Text = "Aucun agent sélectionné.",
+                    Foreground = new SolidColorBrush(Color.FromRgb(0x44, 0x44, 0x66)),
+                    FontSize = 12,
+                    Margin = new Thickness(0, 8, 0, 8)
+                });
             }
+        }
+
+        private Border BuildAgentResumeSection(string agentNom, string ilot,
+            decimal qteSuper, decimal montantSuper, decimal qteGasoil, decimal montantGasoil)
+        {
+            var border = new Border
+            {
+                Background = new SolidColorBrush(Color.FromRgb(0x0D, 0x1F, 0x3C)),
+                Padding = new Thickness(15),
+                Margin = new Thickness(0, 0, 0, 8)
+            };
+
+            var sp = new StackPanel();
+
+            string titre = string.IsNullOrEmpty(ilot)
+                ? agentNom : $"{agentNom}   —   {ilot}";
+
+            sp.Children.Add(new TextBlock
+            {
+                Text = titre,
+                FontSize = 13,
+                FontWeight = FontWeights.Bold,
+                Foreground = Brushes.White,
+                Margin = new Thickness(0, 0, 0, 10)
+            });
+
+            var grid = new Grid();
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(120) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(160) });
+            for (int i = 0; i < 3; i++)
+                grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(28) });
+
+            var verte = new SolidColorBrush(Color.FromRgb(0x00, 0xC8, 0x96));
+            var jaune = new SolidColorBrush(Color.FromRgb(0xFF, 0xC2, 0x00));
+            var gris  = new SolidColorBrush(Color.FromRgb(0x88, 0x88, 0x88));
+
+            void AddCell(int row, int col, string text, Brush fg, bool bold = false)
+            {
+                var tb = new TextBlock
+                {
+                    Text = text,
+                    Foreground = fg,
+                    FontSize = 12,
+                    FontWeight = bold ? FontWeights.Bold : FontWeights.Normal,
+                    VerticalAlignment = VerticalAlignment.Center
+                };
+                Grid.SetRow(tb, row);
+                Grid.SetColumn(tb, col);
+                grid.Children.Add(tb);
+            }
+
+            AddCell(0, 0, "Super vendu",  Brushes.White);
+            AddCell(0, 1, FmtL(qteSuper),       verte);
+            AddCell(0, 2, Fmt(montantSuper),     Brushes.White);
+
+            AddCell(1, 0, "Gasoil vendu", Brushes.White);
+            AddCell(1, 1, FmtL(qteGasoil),      verte);
+            AddCell(1, 2, Fmt(montantGasoil),    Brushes.White);
+
+            decimal totalMontant = montantSuper + montantGasoil;
+            AddCell(2, 0, "TOTAL", Brushes.White, true);
+            AddCell(2, 1, "—",     gris);
+            AddCell(2, 2, Fmt(totalMontant),     jaune, true);
+
+            sp.Children.Add(grid);
+            border.Child = sp;
+            return border;
         }
 
         // ===== SAUVEGARDER =====
         private void BtnSauvegarder_Click(object sender, MouseButtonEventArgs e)
         {
-            // TODO : Sauvegarder en base de données via API Rust
+            // TODO: Sauvegarder en base de données via API Rust
             TxtStatut.Text = "✅ Indexes sauvegardés avec succès !";
             TxtStatut.Foreground = Brushes.LightGreen;
             TxtStatut.Visibility = Visibility.Visible;
@@ -394,7 +389,7 @@ namespace StationShell.Desktop.Views
 
             if (result == MessageBoxResult.Yes)
             {
-                // TODO : Valider en base de données via API Rust
+                // TODO: Valider en base de données via API Rust
                 TxtStatut.Text = "🔒 Indexes validés et figés !";
                 TxtStatut.Foreground = Brushes.Orange;
                 TxtStatut.Visibility = Visibility.Visible;
@@ -445,7 +440,7 @@ namespace StationShell.Desktop.Views
             var txtLib = new TextBlock { Text = libelle, Foreground = Brushes.White, FontSize = 11 };
             var txtMnt = new TextBlock
             {
-                Text = montant.ToString("F0") + " FCFA",
+                Text = Fmt(montant),
                 Foreground = Brushes.OrangeRed, FontSize = 11,
                 HorizontalAlignment = HorizontalAlignment.Right
             };
@@ -457,7 +452,7 @@ namespace StationShell.Desktop.Views
             ListeCharges.Children.Add(ligne);
 
             _totalCharges += montant;
-            TxtTotalCharges.Text = _totalCharges.ToString("F0") + " FCFA";
+            TxtTotalCharges.Text = Fmt(_totalCharges);
             TxtChargeLibelle.Text = "";
             TxtChargeMontant.Text = "";
             MettreAJourCaisse();
@@ -481,7 +476,7 @@ namespace StationShell.Desktop.Views
             var txtLib = new TextBlock { Text = personnel, Foreground = Brushes.White, FontSize = 11 };
             var txtMnt = new TextBlock
             {
-                Text = montant.ToString("F0") + " FCFA",
+                Text = Fmt(montant),
                 Foreground = Brushes.OrangeRed, FontSize = 11,
                 HorizontalAlignment = HorizontalAlignment.Right
             };
@@ -493,7 +488,7 @@ namespace StationShell.Desktop.Views
             ListeAvances.Children.Add(ligne);
 
             _totalAvances += montant;
-            TxtTotalAvances.Text = _totalAvances.ToString("F0") + " FCFA";
+            TxtTotalAvances.Text = Fmt(_totalAvances);
             TxtAvancePersonnel.Text = "";
             TxtAvanceMontant.Text = "";
             MettreAJourCaisse();
@@ -504,56 +499,56 @@ namespace StationShell.Desktop.Views
             decimal totalSuper = 0, totalGasoil = 0, totalBrut = 0;
             decimal totalDecharges = _decharges[0] + _decharges[1] + _decharges[2];
 
-            if (decimal.TryParse(TxtQte1.Text, out decimal q1)) totalSuper += q1;
-            if (decimal.TryParse(TxtQte3.Text, out decimal q3)) totalSuper += q3;
-            if (decimal.TryParse(TxtQte5.Text, out decimal q5)) totalSuper += q5;
-            if (decimal.TryParse(TxtQte2.Text, out decimal q2)) totalGasoil += q2;
-            if (decimal.TryParse(TxtQte4.Text, out decimal q4)) totalGasoil += q4;
-            if (decimal.TryParse(TxtQte6.Text, out decimal q6)) totalGasoil += q6;
+            if (ParseDec(TxtQte1.Text, out decimal q1)) totalSuper += q1;
+            if (ParseDec(TxtQte3.Text, out decimal q3)) totalSuper += q3;
+            if (ParseDec(TxtQte5.Text, out decimal q5)) totalSuper += q5;
+            if (ParseDec(TxtQte2.Text, out decimal q2)) totalGasoil += q2;
+            if (ParseDec(TxtQte4.Text, out decimal q4)) totalGasoil += q4;
+            if (ParseDec(TxtQte6.Text, out decimal q6)) totalGasoil += q6;
 
-            if (decimal.TryParse(TxtTotal1.Text, out decimal t1)) totalBrut += t1;
-            if (decimal.TryParse(TxtTotal2.Text, out decimal t2)) totalBrut += t2;
-            if (decimal.TryParse(TxtTotal3.Text, out decimal t3)) totalBrut += t3;
-            if (decimal.TryParse(TxtTotal4.Text, out decimal t4)) totalBrut += t4;
-            if (decimal.TryParse(TxtTotal5.Text, out decimal t5)) totalBrut += t5;
-            if (decimal.TryParse(TxtTotal6.Text, out decimal t6)) totalBrut += t6;
+            if (ParseDec(TxtTotal1.Text, out decimal t1)) totalBrut += t1;
+            if (ParseDec(TxtTotal2.Text, out decimal t2)) totalBrut += t2;
+            if (ParseDec(TxtTotal3.Text, out decimal t3)) totalBrut += t3;
+            if (ParseDec(TxtTotal4.Text, out decimal t4)) totalBrut += t4;
+            if (ParseDec(TxtTotal5.Text, out decimal t5)) totalBrut += t5;
+            if (ParseDec(TxtTotal6.Text, out decimal t6)) totalBrut += t6;
 
-            decimal brutP1 = (decimal.TryParse(TxtTotal1.Text, out decimal tp1) ? tp1 : 0)
-                           + (decimal.TryParse(TxtTotal2.Text, out decimal tp2) ? tp2 : 0);
-            decimal brutP2 = (decimal.TryParse(TxtTotal3.Text, out decimal tp3) ? tp3 : 0)
-                           + (decimal.TryParse(TxtTotal4.Text, out decimal tp4) ? tp4 : 0);
-            decimal brutP3 = (decimal.TryParse(TxtTotal5.Text, out decimal tp5) ? tp5 : 0)
-                           + (decimal.TryParse(TxtTotal6.Text, out decimal tp6) ? tp6 : 0);
+            decimal brutP1 = (ParseDec(TxtTotal1.Text, out decimal tp1) ? tp1 : 0)
+                           + (ParseDec(TxtTotal2.Text, out decimal tp2) ? tp2 : 0);
+            decimal brutP2 = (ParseDec(TxtTotal3.Text, out decimal tp3) ? tp3 : 0)
+                           + (ParseDec(TxtTotal4.Text, out decimal tp4) ? tp4 : 0);
+            decimal brutP3 = (ParseDec(TxtTotal5.Text, out decimal tp5) ? tp5 : 0)
+                           + (ParseDec(TxtTotal6.Text, out decimal tp6) ? tp6 : 0);
 
-            TxtCaisseP1Super.Text  = (decimal.TryParse(TxtQte1.Text, out decimal s1) ? s1 : 0).ToString("F2") + " L";
-            TxtCaisseP1Gasoil.Text = (decimal.TryParse(TxtQte2.Text, out decimal g1) ? g1 : 0).ToString("F2") + " L";
-            TxtCaisseP1Brut.Text   = brutP1.ToString("F0") + " FCFA";
-            TxtCaisseP1Decharge.Text = _decharges[0].ToString("F0") + " FCFA";
-            TxtCaisseP1Net.Text    = (brutP1 - _decharges[0]).ToString("F0") + " FCFA";
+            TxtCaisseP1Super.Text    = FmtL(ParseDec(TxtQte1.Text, out decimal s1) ? s1 : 0);
+            TxtCaisseP1Gasoil.Text   = FmtL(ParseDec(TxtQte2.Text, out decimal g1) ? g1 : 0);
+            TxtCaisseP1Brut.Text     = Fmt(brutP1);
+            TxtCaisseP1Decharge.Text = Fmt(_decharges[0]);
+            TxtCaisseP1Net.Text      = Fmt(brutP1 - _decharges[0]);
 
-            TxtCaisseP2Super.Text  = (decimal.TryParse(TxtQte3.Text, out decimal s2) ? s2 : 0).ToString("F2") + " L";
-            TxtCaisseP2Gasoil.Text = (decimal.TryParse(TxtQte4.Text, out decimal g2) ? g2 : 0).ToString("F2") + " L";
-            TxtCaisseP2Brut.Text   = brutP2.ToString("F0") + " FCFA";
-            TxtCaisseP2Decharge.Text = _decharges[1].ToString("F0") + " FCFA";
-            TxtCaisseP2Net.Text    = (brutP2 - _decharges[1]).ToString("F0") + " FCFA";
+            TxtCaisseP2Super.Text    = FmtL(ParseDec(TxtQte3.Text, out decimal s2) ? s2 : 0);
+            TxtCaisseP2Gasoil.Text   = FmtL(ParseDec(TxtQte4.Text, out decimal g2) ? g2 : 0);
+            TxtCaisseP2Brut.Text     = Fmt(brutP2);
+            TxtCaisseP2Decharge.Text = Fmt(_decharges[1]);
+            TxtCaisseP2Net.Text      = Fmt(brutP2 - _decharges[1]);
 
-            TxtCaisseP3Super.Text  = (decimal.TryParse(TxtQte5.Text, out decimal s3) ? s3 : 0).ToString("F2") + " L";
-            TxtCaisseP3Gasoil.Text = (decimal.TryParse(TxtQte6.Text, out decimal g3) ? g3 : 0).ToString("F2") + " L";
-            TxtCaisseP3Brut.Text   = brutP3.ToString("F0") + " FCFA";
-            TxtCaisseP3Decharge.Text = _decharges[2].ToString("F0") + " FCFA";
-            TxtCaisseP3Net.Text    = (brutP3 - _decharges[2]).ToString("F0") + " FCFA";
+            TxtCaisseP3Super.Text    = FmtL(ParseDec(TxtQte5.Text, out decimal s3) ? s3 : 0);
+            TxtCaisseP3Gasoil.Text   = FmtL(ParseDec(TxtQte6.Text, out decimal g3) ? g3 : 0);
+            TxtCaisseP3Brut.Text     = Fmt(brutP3);
+            TxtCaisseP3Decharge.Text = Fmt(_decharges[2]);
+            TxtCaisseP3Net.Text      = Fmt(brutP3 - _decharges[2]);
 
-            TxtRecapSuper.Text          = totalSuper.ToString("F2") + " L";
-            TxtRecapSuperMontant.Text   = (totalSuper * _prixSuper).ToString("F0") + " FCFA";
-            TxtRecapGasoil.Text         = totalGasoil.ToString("F2") + " L";
-            TxtRecapGasoilMontant.Text  = (totalGasoil * _prixGasoil).ToString("F0") + " FCFA";
-            TxtRecapBrut.Text           = totalBrut.ToString("F0") + " FCFA";
-            TxtRecapDecharges.Text      = totalDecharges.ToString("F0") + " FCFA";
-            TxtRecapCharges.Text        = _totalCharges.ToString("F0") + " FCFA";
-            TxtRecapAvances.Text        = _totalAvances.ToString("F0") + " FCFA";
+            TxtRecapSuper.Text         = FmtL(totalSuper);
+            TxtRecapSuperMontant.Text  = Fmt(totalSuper * _prixSuper);
+            TxtRecapGasoil.Text        = FmtL(totalGasoil);
+            TxtRecapGasoilMontant.Text = Fmt(totalGasoil * _prixGasoil);
+            TxtRecapBrut.Text          = Fmt(totalBrut);
+            TxtRecapDecharges.Text     = Fmt(totalDecharges);
+            TxtRecapCharges.Text       = Fmt(_totalCharges);
+            TxtRecapAvances.Text       = Fmt(_totalAvances);
 
             decimal caisseNette = totalBrut + totalDecharges - _totalCharges - _totalAvances;
-            TxtCaisseNette.Text = caisseNette.ToString("F0") + " FCFA";
+            TxtCaisseNette.Text = Fmt(caisseNette);
         }
 
         private void BtnCloturerCaisse_Click(object sender, MouseButtonEventArgs e)
@@ -566,7 +561,7 @@ namespace StationShell.Desktop.Views
 
             if (result == MessageBoxResult.Yes)
             {
-                // TODO : Sauvegarder en base via API Rust
+                // TODO: Sauvegarder en base via API Rust
                 MessageBox.Show("✅ Caisse clôturée avec succès !",
                     "Caisse clôturée", MessageBoxButton.OK, MessageBoxImage.Information);
             }
